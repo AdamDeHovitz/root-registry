@@ -4,8 +4,9 @@ import { relations } from "drizzle-orm";
 /**
  * Users table
  * Stores user authentication and profile information
+ * Prefixed with 'root_' to coexist with other projects in shared Supabase
  */
-export const users = pgTable("users", {
+export const users = pgTable("root_users", {
   id: uuid("id").defaultRandom().primaryKey(),
   email: text("email").unique().notNull(),
   username: text("username").unique().notNull(),
@@ -20,7 +21,7 @@ export const users = pgTable("users", {
  * Leagues table
  * Password-protected groups where games are tracked
  */
-export const leagues = pgTable("leagues", {
+export const leagues = pgTable("root_leagues", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
   description: text("description"),
@@ -34,7 +35,7 @@ export const leagues = pgTable("leagues", {
  * League Memberships table
  * Tracks users' membership in leagues and admin status
  */
-export const leagueMemberships = pgTable("league_memberships", {
+export const leagueMemberships = pgTable("root_league_memberships", {
   id: uuid("id").defaultRandom().primaryKey(),
   leagueId: uuid("league_id").references(() => leagues.id, { onDelete: "cascade" }).notNull(),
   userId: uuid("user_id").references(() => users.id, { onDelete: "set null" }),
@@ -47,7 +48,7 @@ export const leagueMemberships = pgTable("league_memberships", {
  * Games table
  * Stores information about each played game
  */
-export const games = pgTable("games", {
+export const games = pgTable("root_games", {
   id: uuid("id").defaultRandom().primaryKey(),
   leagueId: uuid("league_id").references(() => leagues.id, { onDelete: "cascade" }).notNull(),
   date: date("date").defaultNow().notNull(),
@@ -64,7 +65,7 @@ export const games = pgTable("games", {
  * Game Players table
  * Stores player information for each game
  */
-export const gamePlayers = pgTable("game_players", {
+export const gamePlayers = pgTable("root_game_players", {
   id: uuid("id").defaultRandom().primaryKey(),
   gameId: uuid("game_id").references(() => games.id, { onDelete: "cascade" }).notNull(),
   playerName: text("player_name").notNull(),
