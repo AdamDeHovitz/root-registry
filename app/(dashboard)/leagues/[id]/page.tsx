@@ -1,25 +1,28 @@
 import { auth } from "@/lib/auth/config";
 import { findLeagueById, isLeagueAdmin, getLeagueMembers } from "@/lib/db/queries/leagues";
+import { getLeagueGames } from "@/lib/db/queries/games";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
-export default async function LeagueDetailPage({ params }: { params: { id: string } }) {
+export default async function LeagueDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
 
   if (!session?.user?.id) {
     redirect("/login");
   }
 
-  const league = await findLeagueById(params.id);
+  const { id } = await params;
+  const league = await findLeagueById(id);
 
   if (!league) {
     notFound();
   }
 
-  const isAdmin = await isLeagueAdmin(params.id, session.user.id);
-  const members = await getLeagueMembers(params.id);
+  const isAdmin = await isLeagueAdmin(id, session.user.id);
+  const members = await getLeagueMembers(id);
+  const games = await getLeagueGames(id);
 
   return (
     <div className="space-y-6">
@@ -41,7 +44,7 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
           {league.description && <p className="mt-2 text-muted-foreground">{league.description}</p>}
         </div>
         <Button asChild>
-          <Link href={`/leagues/${params.id}/games/new`}>Add Game</Link>
+          <Link href={`/leagues/${id}/games/new`}>Add Game</Link>
         </Button>
       </div>
 
@@ -105,13 +108,44 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
 
       <Card>
         <CardHeader>
-          <CardTitle>Recent Games</CardTitle>
+          <CardTitle>Recent Games ({games.length})</CardTitle>
           <CardDescription>Games played in this league</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground">
-            No games recorded yet. Add your first game to get started!
-          </p>
+          {games.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              No games recorded yet. Add your first game to get started!
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {games.slice(0, 10).map((game) => {
+                const winner = game.players.find((p) => p.isWinner);
+                return (
+                  <div key={game.id} className="rounded-lg border p-4">
+                    <div className="flex items-start justify-between">
+                      <div className="space-y-1">
+                        <p className="font-medium">
+                          {new Date(game.date).toLocaleDateString()} • {game.map}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          Winner: {winner?.playerName} ({winner?.faction})
+                          {winner?.isDominanceVictory && " - Dominance Victory"}
+                        </p>
+                        <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+                          {game.players.map((p, i) => (
+                            <span key={i}>
+                              {p.playerName} - {p.faction}
+                              {p.score !== null && ` (${p.score})`}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
