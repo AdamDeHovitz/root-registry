@@ -1,0 +1,20 @@
+{
+  "date": "2025-11-25",
+  "map": "Unknown",
+  "players": [
+    {
+      "name": "JuanxOwo",
+      "faction": "Eyrie",
+      "score": 32,
+      "dominanceVictory": false,
+      "isWinner": true
+    },
+    {
+      "name": "Loxo33",
+      "faction": "Marquise de Cat",
+      "score": 14,
+      "dominanceVictory": false,
+      "isWinner": false
+    }
+  ]
+}

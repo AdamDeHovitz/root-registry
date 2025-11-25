@@ -1,0 +1,34 @@
+{
+  "date": "2025-11-25",
+  "map": "Unknown",
+  "players": [
+    {
+      "name": "You",
+      "faction": "Eyrie",
+      "score": null,
+      "dominanceVictory": true,
+      "isWinner": true
+    },
+    {
+      "name": "Unknown",
+      "faction": "Woodland Alliance",
+      "score": 23,
+      "dominanceVictory": false,
+      "isWinner": false
+    },
+    {
+      "name": "Unknown",
+      "faction": "Marquise de Cat",
+      "score": 15,
+      "dominanceVictory": false,
+      "isWinner": false
+    },
+    {
+      "name": "Unknown",
+      "faction": "Vagabond",
+      "score": 11,
+      "dominanceVictory": false,
+      "isWinner": false
+    }
+  ]
+}
