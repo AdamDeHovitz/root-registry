@@ -64,6 +64,31 @@ export const {
     }),
   ],
   callbacks: {
+    async signIn({ user, account }) {
+      // For OAuth providers, create user in database if they don't exist
+      if (account?.provider === "google") {
+        const existingUser = await findUserByEmail(user.email!);
+
+        if (!existingUser) {
+          const { createUser } = await import("../db/queries/users");
+          const username = user.email!.split("@")[0];
+
+          const newUser = await createUser({
+            email: user.email!,
+            username,
+            image: user.image,
+          });
+
+          user.id = newUser.id;
+          user.username = newUser.username;
+        } else {
+          user.id = existingUser.id;
+          user.username = existingUser.username;
+          user.direwolfUsername = existingUser.direwolfUsername || undefined;
+        }
+      }
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
