@@ -3,6 +3,7 @@ import { findLeagueById, isLeagueAdmin, getLeagueMembers } from "@/lib/db/querie
 import { getLeagueGames } from "@/lib/db/queries/games";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { CopyButton } from "@/components/leagues/CopyButton";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
@@ -58,13 +59,7 @@ export default async function LeagueDetailPage({ params }: { params: Promise<{ i
               <p className="text-sm font-medium">League ID</p>
               <div className="flex items-center gap-2">
                 <code className="rounded bg-muted px-2 py-1 text-sm">{league.id}</code>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => navigator.clipboard.writeText(league.id)}
-                >
-                  Copy
-                </Button>
+                <CopyButton text={league.id} />
               </div>
               <p className="mt-1 text-xs text-muted-foreground">
                 Share this ID with others to join
