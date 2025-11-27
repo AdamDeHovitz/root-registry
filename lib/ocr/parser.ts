@@ -1,5 +1,5 @@
-import { FACTIONS, FACTION_OCR_ALIASES } from "@/lib/constants/factions";
-import { MAPS, MAP_OCR_ALIASES } from "@/lib/constants/maps";
+import { FACTIONS, FACTION_ALIASES } from "@/lib/constants/factions";
+import { MAPS, MAP_ALIASES } from "@/lib/constants/maps";
 
 interface OCRResult {
   map?: string;
@@ -10,7 +10,7 @@ interface OCRResult {
 }
 
 // Fuzzy match a string against a list of options
-function fuzzyMatch(text: string, options: readonly string[], aliases?: Record<string, string[]>): string | null {
+function fuzzyMatch(text: string, options: readonly string[], aliases?: Record<string, string>): string | null {
   const normalized = text.toLowerCase().trim();
 
   // Exact match
@@ -22,11 +22,9 @@ function fuzzyMatch(text: string, options: readonly string[], aliases?: Record<s
 
   // Alias match
   if (aliases) {
-    for (const [key, aliasList] of Object.entries(aliases)) {
-      for (const alias of aliasList) {
-        if (normalized.includes(alias.toLowerCase()) || alias.toLowerCase().includes(normalized)) {
-          return key;
-        }
+    for (const [alias, target] of Object.entries(aliases)) {
+      if (normalized.includes(alias.toLowerCase()) || alias.toLowerCase().includes(normalized)) {
+        return target;
       }
     }
   }
@@ -50,7 +48,7 @@ export function parseOCRText(text: string): OCRResult {
 
   // Try to find the map
   for (const line of lines) {
-    const map = fuzzyMatch(line, MAPS, MAP_OCR_ALIASES);
+    const map = fuzzyMatch(line, MAPS, MAP_ALIASES);
     if (map) {
       result.map = map;
       break;
@@ -67,7 +65,7 @@ export function parseOCRText(text: string): OCRResult {
     // Remove the score from the line to get the faction text
     const factionText = scoreMatch ? line.replace(scoreMatch[0], "").trim() : line;
 
-    const faction = fuzzyMatch(factionText, FACTIONS, FACTION_OCR_ALIASES);
+    const faction = fuzzyMatch(factionText, FACTIONS, FACTION_ALIASES);
 
     if (faction) {
       result.players.push({

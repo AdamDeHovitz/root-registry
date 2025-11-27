@@ -21,7 +21,9 @@
       "Bash(gh auth status:*)",
       "Bash(git remote set-url:*)",
       "Bash(/Users/adamdeho/agent-tools/browser-tools/browser-screenshot.js)",
-      "Bash(/Users/adamdeho/agent-tools/browser-tools/browser-nav.js:*)"
+      "Bash(/Users/adamdeho/agent-tools/browser-tools/browser-nav.js:*)",
+      "Bash(find:*)",
+      "Bash(npm run test:run:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,0 +1,143 @@
+{
+  "dominance.webp": {
+    "map": null,
+    "players": [
+      {
+        "faction": "Eyrie",
+        "score": null,
+        "isWinner": true,
+        "isDominanceVictory": true
+      },
+      {
+        "faction": "Woodland Alliance",
+        "score": 23,
+        "isWinner": false,
+        "isDominanceVictory": false
+      },
+      {
+        "faction": "Marquise de Cat",
+        "score": 15,
+        "isWinner": false,
+        "isDominanceVictory": false
+      },
+      {
+        "faction": "Vagabond",
+        "score": 11,
+        "isWinner": false,
+        "isDominanceVictory": false
+      }
+    ]
+  },
+  "french.webp": {
+    "map": null,
+    "players": [
+      {
+        "faction": "Eyrie",
+        "score": 32,
+        "isWinner": true,
+        "isDominanceVictory": false
+      },
+      {
+        "faction": "Marquise de Cat",
+        "score": 14,
+        "isWinner": false,
+        "isDominanceVictory": false
+      }
+    ]
+  },
+  "BardInvades.PNG": {
+    "map": null,
+    "players": [
+      {
+        "faction": "Lord of the Hundreds",
+        "score": 30,
+        "isWinner": true,
+        "isDominanceVictory": false
+      },
+      {
+        "faction": null,
+        "score": 23,
+        "isWinner": false,
+        "isDominanceVictory": false,
+        "note": "Faction unclear from image"
+      },
+      {
+        "faction": null,
+        "score": 23,
+        "isWinner": false,
+        "isDominanceVictory": false,
+        "note": "Faction unclear from image"
+      },
+      {
+        "faction": null,
+        "score": null,
+        "isWinner": false,
+        "isDominanceVictory": false,
+        "note": "Faction and score unclear from image"
+      }
+    ]
+  },
+  "canute.PNG": {
+    "map": null,
+    "players": [
+      {
+        "faction": "Marquise de Cat",
+        "score": 30,
+        "isWinner": true,
+        "isDominanceVictory": false
+      },
+      {
+        "faction": null,
+        "score": 23,
+        "isWinner": false,
+        "isDominanceVictory": false,
+        "note": "Faction unclear from image"
+      },
+      {
+        "faction": "Riverfolk Company",
+        "score": 12,
+        "isWinner": false,
+        "isDominanceVictory": false
+      },
+      {
+        "faction": null,
+        "score": null,
+        "isWinner": false,
+        "isDominanceVictory": false,
+        "note": "Faction and score unclear from image"
+      }
+    ]
+  },
+  "keepers.PNG": {
+    "map": null,
+    "players": [
+      {
+        "faction": "Keepers in Iron",
+        "score": 30,
+        "isWinner": true,
+        "isDominanceVictory": false
+      },
+      {
+        "faction": null,
+        "score": 19,
+        "isWinner": false,
+        "isDominanceVictory": false,
+        "note": "Faction unclear from image"
+      },
+      {
+        "faction": null,
+        "score": 11,
+        "isWinner": false,
+        "isDominanceVictory": false,
+        "note": "Faction unclear from image"
+      },
+      {
+        "faction": null,
+        "score": 9,
+        "isWinner": false,
+        "isDominanceVictory": false,
+        "note": "Faction unclear from image"
+      }
+    ]
+  }
+}
