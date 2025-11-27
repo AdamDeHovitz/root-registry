@@ -6,7 +6,22 @@
       "Bash(npm install:*)",
       "Bash(npm run build:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npm run db:push:*)",
+      "Bash(npx drizzle-kit:*)",
+      "Bash(npm run dev:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(navigate http://localhost:3000/dashboard)",
+      "Bash(/Users/adamdeho/agent-tools/browser-tools/browser-start.js --profile)",
+      "Bash(/Users/adamdeho/agent-tools/browser-tools/browser-start.js)",
+      "Bash(/Users/adamdeho/agent-tools/browser-tools/browser-nav.js http://localhost:3000/dashboard)",
+      "Bash(/Users/adamdeho/agent-tools/browser-tools/browser-nav.js http://localhost:3000/login)",
+      "Bash(git push:*)",
+      "Bash(gh auth status:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(/Users/adamdeho/agent-tools/browser-tools/browser-screenshot.js)",
+      "Bash(/Users/adamdeho/agent-tools/browser-tools/browser-nav.js:*)"
     ],
     "deny": [],
     "ask": []

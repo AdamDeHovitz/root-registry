@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { FACTIONS } from "@/lib/constants/factions";
 import { MAPS } from "@/lib/constants/maps";
 import { X } from "lucide-react";
+import { OCRUpload } from "./OCRUpload";
 
 interface Player {
   playerName: string;
@@ -70,6 +71,52 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
     const updated = [...players];
     updated[index] = { ...updated[index], [field]: value };
     setPlayers(updated);
+  };
+
+  const handleOCRComplete = (data: { map?: string; players: Array<{ faction: string; score?: number }> }) => {
+    // Set map if detected
+    if (data.map) {
+      setMap(data.map);
+    }
+
+    // Update players with OCR data
+    if (data.players.length > 0) {
+      const updatedPlayers = [...players];
+
+      // Keep the first player (current user) but update their faction if detected
+      if (data.players[0]) {
+        updatedPlayers[0] = {
+          ...updatedPlayers[0],
+          faction: data.players[0].faction,
+          score: data.players[0].score,
+        };
+      }
+
+      // Add additional players from OCR
+      for (let i = 1; i < data.players.length && i < 6; i++) {
+        const ocrPlayer = data.players[i];
+        if (updatedPlayers[i]) {
+          // Update existing player slot
+          updatedPlayers[i] = {
+            ...updatedPlayers[i],
+            faction: ocrPlayer.faction,
+            score: ocrPlayer.score,
+          };
+        } else {
+          // Add new player slot
+          updatedPlayers.push({
+            playerName: "",
+            faction: ocrPlayer.faction,
+            score: ocrPlayer.score,
+            isWinner: false,
+            isDominanceVictory: false,
+            order: i,
+          });
+        }
+      }
+
+      setPlayers(updatedPlayers);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -141,6 +188,8 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      <OCRUpload onOCRComplete={handleOCRComplete} />
+
       <Card>
         <CardHeader>
           <CardTitle>Game Details</CardTitle>
