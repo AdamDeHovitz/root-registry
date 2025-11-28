@@ -1,27 +1,31 @@
 {
   "dominance.webp": {
-    "map": null,
+    "map": "Fall",
     "players": [
       {
+        "playerName": "You",
         "faction": "Eyrie",
         "score": null,
         "isWinner": true,
         "isDominanceVictory": true
       },
       {
+        "playerName": "Woodland Alliance",
         "faction": "Woodland Alliance",
         "score": 23,
         "isWinner": false,
         "isDominanceVictory": false
       },
       {
+        "playerName": "Marquise de Cat",
         "faction": "Marquise de Cat",
         "score": 15,
         "isWinner": false,
         "isDominanceVictory": false
       },
       {
-        "faction": "Vagabond",
+        "playerName": "Vagabond",
+        "faction": "Vagabond - Thief",
         "score": 11,
         "isWinner": false,
         "isDominanceVictory": false
@@ -29,15 +33,17 @@
     ]
   },
   "french.webp": {
-    "map": null,
+    "map": "Fall",
     "players": [
       {
+        "playerName": "JuanxOwo",
         "faction": "Eyrie",
         "score": 32,
         "isWinner": true,
         "isDominanceVictory": false
       },
       {
+        "playerName": "Loxo33",
         "faction": "Marquise de Cat",
         "score": 14,
         "isWinner": false,
@@ -46,97 +52,101 @@
     ]
   },
   "BardInvades.PNG": {
-    "map": null,
+    "map": "Mountain",
     "players": [
       {
+        "playerName": "BardInvades",
         "faction": "Lord of the Hundreds",
         "score": 30,
         "isWinner": true,
         "isDominanceVictory": false
       },
       {
-        "faction": null,
-        "score": 23,
+        "playerName": "jsafo",
+        "faction": "Underground Duchy",
+        "score": 24,
         "isWinner": false,
-        "isDominanceVictory": false,
-        "note": "Faction unclear from image"
+        "isDominanceVictory": false
       },
       {
-        "faction": null,
+        "playerName": "Canute",
+        "faction": "Corvid Conspiracy",
         "score": 23,
         "isWinner": false,
-        "isDominanceVictory": false,
-        "note": "Faction unclear from image"
+        "isDominanceVictory": false
       },
       {
-        "faction": null,
-        "score": null,
+        "playerName": "GeneralSherman",
+        "faction": "Lizard Cult",
+        "score": 23,
         "isWinner": false,
-        "isDominanceVictory": false,
-        "note": "Faction and score unclear from image"
+        "isDominanceVictory": false
       }
     ]
   },
   "canute.PNG": {
-    "map": null,
+    "map": "Fall",
     "players": [
       {
+        "playerName": "Canute",
         "faction": "Marquise de Cat",
         "score": 30,
         "isWinner": true,
         "isDominanceVictory": false
       },
       {
-        "faction": null,
+        "playerName": "BardInvades",
+        "faction": "Underground Duchy",
         "score": 23,
-        "isWinner": false,
-        "isDominanceVictory": false,
-        "note": "Faction unclear from image"
-      },
-      {
-        "faction": "Riverfolk Company",
-        "score": 12,
         "isWinner": false,
         "isDominanceVictory": false
       },
       {
-        "faction": null,
+        "playerName": "jsafo",
+        "faction": "Riverfolk Company",
+        "score": 12,
+        "isWinner": false,
+        "isDominanceVictory": true
+      },
+      {
+        "playerName": "GeneralSherman",
+        "faction": "Vagabond  - Harrier",
         "score": null,
         "isWinner": false,
-        "isDominanceVictory": false,
-        "note": "Faction and score unclear from image"
+        "isDominanceVictory": true
       }
     ]
   },
   "keepers.PNG": {
-    "map": null,
+    "map": "Mountain",
     "players": [
       {
+        "playerName": "Canute",
         "faction": "Keepers in Iron",
         "score": 30,
         "isWinner": true,
         "isDominanceVictory": false
       },
       {
-        "faction": null,
+        "playerName": "GeneralSherman",
+        "faction": "Lizard Cult",
         "score": 19,
         "isWinner": false,
-        "isDominanceVictory": false,
-        "note": "Faction unclear from image"
+        "isDominanceVictory": false
       },
       {
-        "faction": null,
+        "playerName": "jsafo",
+        "faction": "Eyrie",
         "score": 11,
         "isWinner": false,
-        "isDominanceVictory": false,
-        "note": "Faction unclear from image"
+        "isDominanceVictory": false
       },
       {
-        "faction": null,
+        "playerName": "BardInvades",
+        "faction": "Vagabond - Adventurer",
         "score": 9,
         "isWinner": false,
-        "isDominanceVictory": false,
-        "note": "Faction unclear from image"
+        "isDominanceVictory": false
       }
     ]
   }
