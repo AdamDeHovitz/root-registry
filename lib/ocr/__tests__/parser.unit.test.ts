@@ -171,7 +171,7 @@ describe('parseOCRText - Unit Tests', () => {
       expect(result.players[0].faction).toBe('Eyrie');
       expect(result.players[1].faction).toBe('Woodland Alliance');
       expect(result.players[2].faction).toBe('Marquise de Cat');
-      expect(result.players[3].faction).toBe('Vagabond');
+      expect(result.players[3].faction).toBe('Vagabond - Thief');
     });
 
     it('should handle partial matches in faction names', () => {
