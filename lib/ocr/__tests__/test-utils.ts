@@ -14,7 +14,7 @@ export interface ExpectedResult {
     faction: string | null;
     score?: number | null;
     isWinner: boolean;
-    isDominanceVictory: boolean;
+    isDominance: boolean;
     note?: string;
   }>;
 }

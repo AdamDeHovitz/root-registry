@@ -124,7 +124,7 @@ export default async function LeagueDetailPage({ params }: { params: Promise<{ i
                         </p>
                         <p className="text-sm text-muted-foreground">
                           Winner: {winner?.playerName} ({winner?.faction})
-                          {winner?.isDominanceVictory && " - Dominance Victory"}
+                          {winner?.isDominance && " - Dominance"}
                         </p>
                         <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
                           {game.players.map((p, i) => (

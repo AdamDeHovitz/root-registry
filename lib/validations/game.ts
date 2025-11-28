@@ -10,7 +10,7 @@ export const gamePlayerSchema = z.object({
   }),
   score: z.number().int().min(0).max(100).optional(),
   isWinner: z.boolean(),
-  isDominanceVictory: z.boolean(),
+  isDominance: z.boolean(),
   order: z.number().int().min(0),
 });
 

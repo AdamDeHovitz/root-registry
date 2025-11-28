@@ -17,7 +17,7 @@ interface Player {
   faction: string;
   score?: number;
   isWinner: boolean;
-  isDominanceVictory: boolean;
+  isDominance: boolean;
   order: number;
 }
 
@@ -38,7 +38,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
       faction: "",
       score: undefined,
       isWinner: false,
-      isDominanceVictory: false,
+      isDominance: false,
       order: 0,
     },
   ]);
@@ -53,7 +53,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
         faction: "",
         score: undefined,
         isWinner: false,
-        isDominanceVictory: false,
+        isDominance: false,
         order: players.length,
       },
     ]);
@@ -109,7 +109,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
             faction: ocrPlayer.faction,
             score: ocrPlayer.score,
             isWinner: false,
-            isDominanceVictory: false,
+            isDominance: false,
             order: i,
           });
         }
@@ -300,7 +300,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
 
                 <div className="space-y-2">
                   <Label htmlFor={`player-${index}-score`}>
-                    Score {player.isDominanceVictory && "(optional)"}
+                    Score {player.isDominance && "(optional)"}
                   </Label>
                   <Input
                     id={`player-${index}-score`}
@@ -315,7 +315,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
                         e.target.value ? parseInt(e.target.value) : undefined
                       )
                     }
-                    disabled={isLoading || player.isDominanceVictory}
+                    disabled={isLoading || player.isDominance}
                   />
                 </div>
 
@@ -337,15 +337,15 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
                     <input
                       type="checkbox"
                       id={`player-${index}-dominance`}
-                      checked={player.isDominanceVictory}
+                      checked={player.isDominance}
                       onChange={(e) =>
-                        updatePlayer(index, "isDominanceVictory", e.target.checked)
+                        updatePlayer(index, "isDominance", e.target.checked)
                       }
                       disabled={isLoading}
                       className="h-4 w-4"
                     />
                     <Label htmlFor={`player-${index}-dominance`} className="font-normal">
-                      Dominance Victory
+                      Dominance
                     </Label>
                   </div>
                 </div>
