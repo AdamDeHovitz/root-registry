@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
         faction: p.faction,
         score: p.score,
         isWinner: p.isWinner,
-        isDominanceVictory: p.isDominanceVictory,
+        isDominance: p.isDominance,
         order: p.order,
       }))
     );
