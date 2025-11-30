@@ -11,6 +11,9 @@ import { MAPS } from "@/lib/constants/maps";
  */
 export function generateVisionPrompt(): string {
   const factionList = FACTIONS.map((f, i) => `${i + 1}. "${f}"`).join("\n");
+
+  // Only include maps available in the digital game (OCR is for digital screenshots only)
+  // Physical maps (Gorge, Swamp) and custom maps are for manual entry
   const mapList = MAPS.filter(m => ["Fall", "Winter", "Lake", "Mountain"].includes(m))
     .map((m, i) => `${i + 1}. "${m}"`).join("\n");
 
