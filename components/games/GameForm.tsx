@@ -73,7 +73,17 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
     setPlayers(updated);
   };
 
-  const handleOCRComplete = (data: { map?: string; players: Array<{ faction: string; score?: number }> }) => {
+  const handleOCRComplete = (data: {
+    map?: string;
+    players: Array<{
+      playerName?: string;
+      faction: string;
+      score?: number;
+      isWinner?: boolean;
+      isDominance?: boolean;
+      order?: number;
+    }>;
+  }) => {
     // Set map if detected
     if (data.map) {
       setMap(data.map);
@@ -81,36 +91,60 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
 
     // Update players with OCR data
     if (data.players.length > 0) {
-      const updatedPlayers = [...players];
+      const updatedPlayers: Player[] = [];
 
-      // Keep the first player (current user) but update their faction if detected
-      if (data.players[0]) {
-        updatedPlayers[0] = {
-          ...updatedPlayers[0],
-          faction: data.players[0].faction,
-          score: data.players[0].score,
-        };
-      }
+      // Check if current user is in the OCR results
+      const currentUserInOCR = data.players.find(
+        (p) => p.playerName?.toLowerCase() === currentUsername.toLowerCase()
+      );
 
-      // Add additional players from OCR
-      for (let i = 1; i < data.players.length && i < 6; i++) {
-        const ocrPlayer = data.players[i];
-        if (updatedPlayers[i]) {
-          // Update existing player slot
-          updatedPlayers[i] = {
-            ...updatedPlayers[i],
-            faction: ocrPlayer.faction,
-            score: ocrPlayer.score,
-          };
-        } else {
-          // Add new player slot
+      if (currentUserInOCR) {
+        // Current user found in OCR - use that data
+        updatedPlayers.push({
+          playerName: currentUsername,
+          userId: currentUserId,
+          faction: currentUserInOCR.faction,
+          score: currentUserInOCR.score,
+          isWinner: currentUserInOCR.isWinner ?? false,
+          isDominance: currentUserInOCR.isDominance ?? false,
+          order: 0,
+        });
+
+        // Add other players from OCR
+        data.players.forEach((ocrPlayer, index) => {
+          if (ocrPlayer.playerName?.toLowerCase() !== currentUsername.toLowerCase()) {
+            updatedPlayers.push({
+              playerName: ocrPlayer.playerName || "",
+              faction: ocrPlayer.faction,
+              score: ocrPlayer.score,
+              isWinner: ocrPlayer.isWinner ?? false,
+              isDominance: ocrPlayer.isDominance ?? false,
+              order: updatedPlayers.length,
+            });
+          }
+        });
+      } else {
+        // Current user not in OCR - keep them first, add OCR players after
+        updatedPlayers.push({
+          playerName: currentUsername,
+          userId: currentUserId,
+          faction: data.players[0]?.faction || "",
+          score: data.players[0]?.score,
+          isWinner: data.players[0]?.isWinner ?? false,
+          isDominance: data.players[0]?.isDominance ?? false,
+          order: 0,
+        });
+
+        // Add remaining OCR players
+        for (let i = 1; i < data.players.length && updatedPlayers.length < 6; i++) {
+          const ocrPlayer = data.players[i];
           updatedPlayers.push({
-            playerName: "",
+            playerName: ocrPlayer.playerName || "",
             faction: ocrPlayer.faction,
             score: ocrPlayer.score,
-            isWinner: false,
-            isDominance: false,
-            order: i,
+            isWinner: ocrPlayer.isWinner ?? false,
+            isDominance: ocrPlayer.isDominance ?? false,
+            order: updatedPlayers.length,
           });
         }
       }

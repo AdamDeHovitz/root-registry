@@ -8,7 +8,17 @@ import { Upload, Loader2, X } from "lucide-react";
 import { fileToBase64 } from "@/lib/ocr/gemini-vision";
 
 interface OCRUploadProps {
-  onOCRComplete: (data: { map?: string; players: Array<{ faction: string; score?: number }> }) => void;
+  onOCRComplete: (data: {
+    map?: string;
+    players: Array<{
+      playerName?: string;
+      faction: string;
+      score?: number;
+      isWinner?: boolean;
+      isDominance?: boolean;
+      order?: number;
+    }>;
+  }) => void;
 }
 
 export function OCRUpload({ onOCRComplete }: OCRUploadProps) {
