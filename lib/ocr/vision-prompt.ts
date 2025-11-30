@@ -88,31 +88,32 @@ Each player section has a colored banner/background. This is the PRIMARY identif
 **Visual Identification Guide by Character:**
 
 **Base Game:**
-- "Marquise de Cat" → Orange/ginger cat in military uniform, aristocratic appearance
-- "Eyrie" → Blue bird, eagle or hawk with regal bearing
-- "Woodland Alliance" → Green mice or small woodland creatures, revolutionary appearance
+- "Marquise de Cat" → Orange cat in military uniform (bright orange banner)
+- "Eyrie" → Blue bird, eagle or hawk (blue banner)
+- "Woodland Alliance" → Green mice or small woodland creatures (green banner)
 
-**Vagabond Characters (examine animal species and gear):**
-- "Vagabond - Thief" → RACCOON with thief/rogue clothing, sneaky appearance
-- "Vagabond - Ranger" → WOLF with ranger gear, rugged explorer with scar over left eye
-- "Vagabond - Tinker" → BEAVER with tools and craftsman gear, inventor appearance
-- "Vagabond - Vagrant" → POSSUM with wanderer/traveler appearance, nomadic gear
-- "Vagabond - Arbiter" → BADGER in heavy armor, judge/authority appearance, armored warrior
-- "Vagabond - Ronin" → RACCOON in samurai clothing and gear, masterless warrior
-- "Vagabond - Adventurer" → OWL (wise old owl) with explorer gear, quest-seeker appearance
-- "Vagabond - Harrier" → SQUIRREL with flight gear or wing-like apparatus, aerial appearance
-- "Vagabond - Scoundrel" → CAT wearing a distinctive PUMPKIN MASK, mischievous rogue
+**Vagabond Characters (light gray/silver banner):**
+Note: All Vagabonds have a light gray/silver banner. Identify the specific type by animal species and gear:
+- "Vagabond - Thief" → RACCOON with thief/rogue clothing
+- "Vagabond - Ranger" → WOLF with ranger gear, scar over left eye
+- "Vagabond - Tinker" → BEAVER with tools and craftsman gear
+- "Vagabond - Vagrant" → POSSUM with wanderer/traveler gear
+- "Vagabond - Arbiter" → BADGER in heavy armor
+- "Vagabond - Ronin" → RACCOON in samurai gear
+- "Vagabond - Adventurer" → OWL with explorer gear
+- "Vagabond - Harrier" → SQUIRREL with flight gear
+- "Vagabond - Scoundrel" → CAT wearing PUMPKIN MASK
 
 **Expansion Factions:**
-- "Lizard Cult" → Yellow or green lizards, reptilian appearance
-- "Riverfolk Company" → Cyan/teal colored OTTERS, merchant traders
-- "Underground Duchy" → Brown or gray MOLES, subterranean creatures
-- "Corvid Conspiracy" → Black CROWS or ravens, conspiratorial appearance
-- "Lord of the Hundreds" → Red/brown RATS with banners and military gear
-- "Keepers in Iron" → Gray BADGERS wearing heavy armor (different from Arbiter - these are a faction, not a Vagabond)
-- "Knaves of Deepwood" → Emerald green themed characters
-- "Lilypad Diaspora" → Green water-themed characters, aquatic
-- "Twilight Council" → Indigo/purple themed characters
+- "Lizard Cult" → Yellow/green lizards (yellow banner)
+- "Riverfolk Company" → Cyan/teal OTTERS (cyan banner)
+- "Underground Duchy" → Brown/tan MOLES (tan/beige banner)
+- "Corvid Conspiracy" → Black CROWS/ravens (purple banner)
+- "Lord of the Hundreds" → RATS with military gear (red banner)
+- "Keepers in Iron" → BADGER in armor, faction not Vagabond (dark steel-gray banner)
+- "Knaves of Deepwood" → Emerald green themed characters (green banner)
+- "Lilypad Diaspora" → Green water-themed characters (light green/aqua banner)
+- "Twilight Council" → Purple themed characters (purple banner)
 
 **Instructions (FOLLOW THIS TWO-STEP PROCESS):**
 
