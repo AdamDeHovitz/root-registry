@@ -12,9 +12,12 @@ export const MAPS = [
   "Lake",
   "Mountain",
 
+  // Homeland Expansion (upcoming)
+  "Gorge",
+  "Swamp",
+
   // Custom/Community
-  "Spring",
-  "Summer",
+  "Other",
 ] as const;
 
 export type Map = typeof MAPS[number];
@@ -29,16 +32,18 @@ export const MAP_ALIASES: Record<string, Map> = {
   "winter": "Winter",
   "lake": "Lake",
   "mountain": "Mountain",
-  "spring": "Spring",
-  "summer": "Summer",
+  "gorge": "Gorge",
+  "swamp": "Swamp",
+  "other": "Other",
+  "custom": "Other",
 
   // French translations
   "automne": "Fall",
   "hiver": "Winter",
   "lac": "Lake",
   "montagne": "Mountain",
-  "printemps": "Spring",
-  "été": "Summer",
+  "marais": "Swamp",
+  "autre": "Other",
 };
 
 /**
@@ -49,6 +54,7 @@ export const MAP_DESCRIPTIONS: Record<Map, string> = {
   "Winter": "Base game map - frozen river variation",
   "Lake": "Underworld expansion - lake centerpiece",
   "Mountain": "Underworld expansion - mountain terrain",
-  "Spring": "Community map - spring theme",
-  "Summer": "Community map - summer theme",
+  "Gorge": "Homeland expansion - gorge terrain",
+  "Swamp": "Homeland expansion - swamp terrain",
+  "Other": "Custom or community map",
 };
