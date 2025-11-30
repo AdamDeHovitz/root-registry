@@ -66,10 +66,24 @@ The player's username shown in the colored box.
 - Common usernames are alphanumeric with no spaces
 
 ### 2b. faction (string, required)
-The faction is shown by the **character avatar** (3D model), NOT text.
+The faction is shown by the **character avatar** (3D model) and the **colored banner/background** behind the player name.
 
 **VALID VALUES (choose exactly one from this list):**
 ${factionList}
+
+**CRITICAL: Banner Color Identification**
+Each player section has a colored banner/background. This is the PRIMARY identifier:
+- **GREY/GRAY BANNER** → Always a Vagabond (one of the 9 Vagabond types)
+- **ORANGE BANNER** → Marquise de Cat
+- **BLUE BANNER** → Eyrie
+- **GREEN BANNER** → Woodland Alliance or Knaves of Deepwood
+- **YELLOW BANNER** → Lizard Cult
+- **CYAN/TEAL BANNER** → Riverfolk Company
+- **BROWN/TAN BANNER** → Underground Duchy or Lord of the Hundreds
+- **BLACK BANNER** → Corvid Conspiracy
+- **GRAY/STEEL BANNER** → Keepers in Iron
+- **PURPLE/INDIGO BANNER** → Twilight Council
+- **LIGHT GREEN/AQUA BANNER** → Lilypad Diaspora
 
 **Visual Identification Guide by Character:**
 
@@ -100,17 +114,29 @@ ${factionList}
 - "Lilypad Diaspora" → Green water-themed characters, aquatic
 - "Twilight Council" → Indigo/purple themed characters
 
-**Instructions:**
-- Look carefully at the 3D character model/avatar for this player
-- Identify the animal species first (raccoon, beaver, owl, cat, wolf, squirrel, possum, badger, etc.)
-- Then look at clothing, gear, and accessories
-- Match to the descriptions above
+**Instructions (FOLLOW THIS TWO-STEP PROCESS):**
+
+**STEP 1: Check the banner color first**
+- Look at the colored banner/background behind the player name
+- GREY BANNER = Vagabond (proceed to Step 2 to identify which Vagabond)
+- BLACK BANNER = Corvid Conspiracy (black crows/ravens)
+- Other colors = use the banner color guide above to narrow down possibilities
+
+**STEP 2: Identify the specific character**
+- Look carefully at the 3D character model/avatar
+- For Vagabonds (grey banner): Identify the animal species
+  - SQUIRREL → Vagabond - Harrier
+  - RACCOON with thief clothing → Vagabond - Thief
+  - RACCOON with samurai gear → Vagabond - Ronin
+  - WOLF with ranger gear → Vagabond - Ranger
+  - BEAVER with tools → Vagabond - Tinker
+  - POSSUM with wanderer gear → Vagabond - Vagrant
+  - BADGER in armor → Vagabond - Arbiter
+  - OWL with explorer gear → Vagabond - Adventurer
+  - CAT with PUMPKIN MASK → Vagabond - Scoundrel
+- For non-Vagabonds: Match the character to faction descriptions
 - Return EXACTLY one of the faction names in quotes above
-- For Vagabonds: The animal species is the primary identifier
-  - Raccoons can be Thief or Ronin (look at gear: rogue clothing vs samurai gear)
-  - Badgers can be Arbiter (Vagabond with armor) or Keepers in Iron (faction with armor)
-- The Scoundrel cat with pumpkin mask is unmistakable
-- If unsure, make your best guess based on animal species and visual style
+- If unsure, prioritize banner color over character appearance
 
 ### 2c. score (number or null, required)
 The score shown in the decorative circular wreath badge on the left side of each player section.
@@ -319,13 +345,15 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
 - Use EXACTLY the faction names from the valid values list (exact spelling, capitalization, punctuation)
 - Use EXACTLY the map names: "Fall", "Winter", "Lake", or "Mountain"
 - The leftmost player (order 0) is usually the winner
-- Look at animal species FIRST when identifying Vagabonds (raccoon, beaver, owl, cat, wolf, squirrel, possum, badger, etc.)
+- **CRITICAL**: Check banner color FIRST - GREY banner = Vagabond, BLACK banner = Corvid Conspiracy
+- For Vagabonds (grey banner): Identify animal species (SQUIRREL = Harrier, RACCOON = Thief or Ronin, OWL = Adventurer, etc.)
 - For Vagabonds with same animal: look at gear (Thief raccoon = rogue clothes, Ronin raccoon = samurai gear)
 - For Badgers: Arbiter Vagabond = single badger in armor, Keepers in Iron = faction with multiple armored badgers
 - The Scoundrel is the only Vagabond wearing a pumpkin mask (easy identifier!)
 - If a player has a dominance icon instead of a score: set score: null and isDominance: true
 - A Vagabond with dominance can win alongside another faction (2 winners maximum)
 - Scores are typically 0-40, but can go up to 100
+- When in doubt between factions, prioritize banner color over character appearance
 
 Now analyze the provided image and return the JSON.`;
 }
