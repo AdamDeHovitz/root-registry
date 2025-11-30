@@ -24,6 +24,10 @@ export const createGameSchema = z
     }),
     description: z.string().optional(),
     imageUrl: z.string().optional(),
+    originalOCRData: z.object({
+      map: z.string().optional(),
+      players: z.array(gamePlayerSchema),
+    }).optional(),
     players: z
       .array(gamePlayerSchema)
       .min(2, "At least 2 players required")

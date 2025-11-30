@@ -34,6 +34,10 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
   const [map, setMap] = useState("");
   const [description, setDescription] = useState("");
   const [imageDataUrl, setImageDataUrl] = useState<string | undefined>(undefined);
+  const [originalOCRData, setOriginalOCRData] = useState<{
+    map?: string;
+    players: Player[];
+  } | null>(null);
   const [players, setPlayers] = useState<Player[]>([
     {
       playerName: "",
@@ -123,6 +127,12 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
       }));
 
       setPlayers(updatedPlayers);
+
+      // Store original OCR data for later comparison
+      setOriginalOCRData({
+        map: data.map,
+        players: updatedPlayers,
+      });
     }
   };
 
@@ -185,6 +195,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
           map,
           description: description || undefined,
           imageUrl: imageDataUrl,
+          originalOCRData: originalOCRData || undefined,
           players: players.map((p, i) => ({
             ...p,
             order: i,

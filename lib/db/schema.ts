@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, timestamp, boolean, integer, date } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, boolean, integer, date, jsonb } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 /**
@@ -80,6 +80,20 @@ export const gamePlayers = pgTable("root_game_players", {
 });
 
 /**
+ * OCR Corrections table
+ * Tracks when users modify AI-parsed game data
+ */
+export const ocrCorrections = pgTable("root_ocr_corrections", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  gameId: uuid("game_id").references(() => games.id, { onDelete: "cascade" }).notNull(),
+  imageUrl: text("image_url").notNull(),
+  originalData: jsonb("original_data").notNull(),
+  correctedData: jsonb("corrected_data").notNull(),
+  fieldsChanged: text("fields_changed").array().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+/**
  * Relations
  */
 export const usersRelations = relations(users, ({ many }) => ({
@@ -119,6 +133,7 @@ export const gamesRelations = relations(games, ({ one, many }) => ({
     references: [users.id],
   }),
   players: many(gamePlayers),
+  ocrCorrections: many(ocrCorrections),
 }));
 
 export const gamePlayersRelations = relations(gamePlayers, ({ one }) => ({
@@ -129,6 +144,13 @@ export const gamePlayersRelations = relations(gamePlayers, ({ one }) => ({
   user: one(users, {
     fields: [gamePlayers.userId],
     references: [users.id],
+  }),
+}));
+
+export const ocrCorrectionsRelations = relations(ocrCorrections, ({ one }) => ({
+  game: one(games, {
+    fields: [ocrCorrections.gameId],
+    references: [games.id],
   }),
 }));
 
@@ -149,3 +171,6 @@ export type NewGame = typeof games.$inferInsert;
 
 export type GamePlayer = typeof gamePlayers.$inferSelect;
 export type NewGamePlayer = typeof gamePlayers.$inferInsert;
+
+export type OCRCorrection = typeof ocrCorrections.$inferSelect;
+export type NewOCRCorrection = typeof ocrCorrections.$inferInsert;
