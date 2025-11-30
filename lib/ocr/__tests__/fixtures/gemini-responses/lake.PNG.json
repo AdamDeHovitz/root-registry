@@ -1,0 +1,46 @@
+{
+  "success": true,
+  "data": {
+    "map": "Lake",
+    "players": [
+      {
+        "playerName": "jsafo",
+        "faction": "Lizard Cult",
+        "score": 30,
+        "isWinner": true,
+        "isDominance": false,
+        "order": 0
+      },
+      {
+        "playerName": "Canute",
+        "faction": "Vagabond - Scoundrel",
+        "score": 24,
+        "isWinner": false,
+        "isDominance": false,
+        "order": 1
+      },
+      {
+        "playerName": "GeneralSherman",
+        "faction": "Underground Duchy",
+        "score": 24,
+        "isWinner": false,
+        "isDominance": false,
+        "order": 2
+      },
+      {
+        "playerName": "TryNihilism",
+        "faction": "Corvid Conspiracy",
+        "score": 20,
+        "isWinner": false,
+        "isDominance": false,
+        "order": 3
+      }
+    ]
+  },
+  "_meta": {
+    "promptHash": "0a4b25945d3a",
+    "testVersion": "1.0.0",
+    "generatedAt": "2025-11-30T18:27:33.835Z",
+    "imageFile": "lake.PNG"
+  }
+}

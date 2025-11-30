@@ -1,53 +1,65 @@
 {
   "dominance.webp": {
-    "map": "Fall",
+    "map": "Mountain",
     "players": [
       {
         "playerName": "You",
         "faction": "Eyrie",
         "score": null,
         "isWinner": true,
-        "isDominance": true
+        "isDominance": true,
+        "coalitionWith": null,
+        "order": 0
       },
       {
         "playerName": "Woodland Alliance",
         "faction": "Woodland Alliance",
         "score": 23,
         "isWinner": false,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 1
       },
       {
         "playerName": "Marquise de Cat",
         "faction": "Marquise de Cat",
         "score": 15,
         "isWinner": false,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 2
       },
       {
         "playerName": "Vagabond",
-        "faction": "Vagabond - Thief",
+        "faction": "Vagabond - Adventurer",
         "score": 11,
         "isWinner": false,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 3
       }
     ]
   },
   "french.webp": {
-    "map": "Fall",
+    "map": "Lake",
     "players": [
       {
         "playerName": "JuanxOwo",
         "faction": "Eyrie",
         "score": 32,
         "isWinner": true,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 0
       },
       {
         "playerName": "Loxo33",
         "faction": "Marquise de Cat",
         "score": 14,
         "isWinner": false,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 1
       }
     ]
   },
@@ -59,61 +71,77 @@
         "faction": "Lord of the Hundreds",
         "score": 30,
         "isWinner": true,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 0
       },
       {
         "playerName": "jsafo",
         "faction": "Underground Duchy",
         "score": 24,
         "isWinner": false,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 1
       },
       {
         "playerName": "Canute",
         "faction": "Corvid Conspiracy",
         "score": 23,
         "isWinner": false,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 2
       },
       {
         "playerName": "GeneralSherman",
         "faction": "Lizard Cult",
         "score": 23,
         "isWinner": false,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 3
       }
     ]
   },
   "canute.PNG": {
-    "map": "Fall",
+    "map": "Lake",
     "players": [
       {
         "playerName": "Canute",
         "faction": "Marquise de Cat",
         "score": 30,
         "isWinner": true,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 0
       },
       {
         "playerName": "BardInvades",
         "faction": "Underground Duchy",
         "score": 23,
         "isWinner": false,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 1
       },
       {
         "playerName": "jsafo",
-        "faction": "Riverfolk Company",
-        "score": 12,
+        "faction": "Woodland Alliance",
+        "score": null,
         "isWinner": false,
-        "isDominance": true
+        "isDominance": true,
+        "coalitionWith": null,
+        "order": 2
       },
       {
         "playerName": "GeneralSherman",
-        "faction": "Vagabond  - Harrier",
+        "faction": "Corvid Conspiracy",
         "score": null,
         "isWinner": false,
-        "isDominance": true
+        "isDominance": true,
+        "coalitionWith": null,
+        "order": 3
       }
     ]
   },
@@ -125,28 +153,36 @@
         "faction": "Keepers in Iron",
         "score": 30,
         "isWinner": true,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 0
       },
       {
         "playerName": "GeneralSherman",
         "faction": "Lizard Cult",
         "score": 19,
         "isWinner": false,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 1
       },
       {
         "playerName": "jsafo",
         "faction": "Eyrie",
         "score": 11,
         "isWinner": false,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 2
       },
       {
         "playerName": "BardInvades",
-        "faction": "Vagabond - Adventurer",
-        "score": 9,
+        "faction": "Corvid Conspiracy",
+        "score": 8,
         "isWinner": false,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 3
       }
     ]
   },
@@ -158,28 +194,36 @@
         "faction": "Lizard Cult",
         "score": 30,
         "isWinner": true,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 0
       },
       {
         "playerName": "Canute",
         "faction": "Vagabond - Scoundrel",
         "score": 24,
         "isWinner": false,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 1
       },
       {
         "playerName": "GeneralSherman",
         "faction": "Underground Duchy",
         "score": 24,
         "isWinner": false,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 2
       },
       {
         "playerName": "TryNihilism",
         "faction": "Corvid Conspiracy",
         "score": 20,
         "isWinner": false,
-        "isDominance": false
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 3
       }
     ]
   }
