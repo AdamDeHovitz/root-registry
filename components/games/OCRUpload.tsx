@@ -5,8 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Upload, Loader2, X } from "lucide-react";
-import { createWorker } from "tesseract.js";
-import { parseOCRText } from "@/lib/ocr/parser";
+import { fileToBase64 } from "@/lib/ocr/gemini-vision";
 
 interface OCRUploadProps {
   onOCRComplete: (data: { map?: string; players: Array<{ faction: string; score?: number }> }) => void;
@@ -16,7 +15,6 @@ export function OCRUpload({ onOCRComplete }: OCRUploadProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState("");
-  const [progress, setProgress] = useState(0);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -36,7 +34,6 @@ export function OCRUpload({ onOCRComplete }: OCRUploadProps) {
 
     setError("");
     setIsProcessing(true);
-    setProgress(0);
 
     // Create preview
     const reader = new FileReader();
@@ -46,39 +43,38 @@ export function OCRUpload({ onOCRComplete }: OCRUploadProps) {
     reader.readAsDataURL(file);
 
     try {
-      // Initialize Tesseract worker
-      const worker = await createWorker("eng", 1, {
-        logger: (m) => {
-          if (m.status === "recognizing text") {
-            setProgress(Math.round(m.progress * 100));
-          }
-        },
+      // Convert image to base64
+      const base64Data = await fileToBase64(file);
+
+      // Send to Gemini Vision API
+      const response = await fetch("/api/ocr", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          image: base64Data,
+          mimeType: file.type,
+        }),
       });
 
-      // Perform OCR
-      const {
-        data: { text },
-      } = await worker.recognize(file);
+      const result = await response.json();
 
-      await worker.terminate();
-
-      // Parse the OCR text
-      const parsed = parseOCRText(text);
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || "OCR processing failed");
+      }
 
       // Pass the parsed data to parent
-      onOCRComplete(parsed);
+      onOCRComplete(result.data);
 
       setIsProcessing(false);
     } catch (err) {
       console.error("OCR error:", err);
-      setError("Failed to process image. Please try again or enter data manually.");
+      setError(err instanceof Error ? err.message : "Failed to process image. Please try again or enter data manually.");
       setIsProcessing(false);
     }
   };
 
   const clearImage = () => {
     setPreview(null);
-    setProgress(0);
     setError("");
   };
 
@@ -129,19 +125,11 @@ export function OCRUpload({ onOCRComplete }: OCRUploadProps) {
               )}
             </div>
             {isProcessing && (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span className="text-sm text-muted-foreground">
-                    Processing image... {progress}%
-                  </span>
-                </div>
-                <div className="h-2 bg-muted rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-primary transition-all duration-300"
-                    style={{ width: `${progress}%` }}
-                  />
-                </div>
+              <div className="flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span className="text-sm text-muted-foreground">
+                  Processing image with AI vision...
+                </span>
               </div>
             )}
           </div>
