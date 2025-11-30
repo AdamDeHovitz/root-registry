@@ -11,6 +11,7 @@ export const gamePlayerSchema = z.object({
   score: z.number().int().min(0).max(100).optional(),
   isWinner: z.boolean(),
   isDominance: z.boolean(),
+  coalitionWith: z.string().optional(),
   order: z.number().int().min(0),
 });
 
@@ -48,6 +49,45 @@ export const createGameSchema = z
     },
     {
       message: "Duplicate factions are not allowed (except Vagabond)",
+      path: ["players"],
+    }
+  )
+  .refine(
+    (data) => {
+      // Validate Vagabond coalitions
+      for (const player of data.players) {
+        // If coalitionWith is set, player must be a Vagabond with dominance
+        if (player.coalitionWith) {
+          if (!player.faction.includes("Vagabond")) {
+            return false;
+          }
+          if (!player.isDominance) {
+            return false;
+          }
+        }
+
+        // If Vagabond with dominance and marked as winner, must have coalitionWith
+        // OR there must be another non-Vagabond winner (the coalition partner)
+        if (
+          player.faction.includes("Vagabond") &&
+          player.isDominance &&
+          player.isWinner
+        ) {
+          const hasCoalitionSet = !!player.coalitionWith;
+          const hasOtherWinner = data.players.some(
+            (p) => p.isWinner && p !== player && !p.faction.includes("Vagabond")
+          );
+
+          if (!hasCoalitionSet && !hasOtherWinner) {
+            return false;
+          }
+        }
+      }
+      return true;
+    },
+    {
+      message:
+        "Coalition rules violated: Vagabonds with dominance must have a coalition partner set or a non-Vagabond winner",
       path: ["players"],
     }
   );

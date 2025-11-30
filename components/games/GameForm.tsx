@@ -18,6 +18,7 @@ interface Player {
   score?: number;
   isWinner: boolean;
   isDominance: boolean;
+  coalitionWith?: string;
   order: number;
 }
 
@@ -38,6 +39,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
       score: undefined,
       isWinner: false,
       isDominance: false,
+      coalitionWith: undefined,
       order: 0,
     },
     {
@@ -46,6 +48,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
       score: undefined,
       isWinner: false,
       isDominance: false,
+      coalitionWith: undefined,
       order: 1,
     },
   ]);
@@ -61,6 +64,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
         score: undefined,
         isWinner: false,
         isDominance: false,
+        coalitionWith: undefined,
         order: players.length,
       },
     ]);
@@ -88,6 +92,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
       score?: number;
       isWinner?: boolean;
       isDominance?: boolean;
+      coalitionWith?: string;
       order?: number;
     }>;
   }) => {
@@ -105,6 +110,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
         score: ocrPlayer.score,
         isWinner: ocrPlayer.isWinner ?? false,
         isDominance: ocrPlayer.isDominance ?? false,
+        coalitionWith: ocrPlayer.coalitionWith,
         order: index,
       }));
 
@@ -363,6 +369,31 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
                   </div>
                 </div>
               </div>
+
+              {player.faction.startsWith("Vagabond") && player.isDominance && (
+                <div className="space-y-2 pt-3 border-t">
+                  <Label htmlFor={`player-${index}-coalition`}>
+                    Coalition Partner (Vagabond allies with this faction)
+                  </Label>
+                  <select
+                    id={`player-${index}-coalition`}
+                    value={player.coalitionWith || ""}
+                    onChange={(e) => updatePlayer(index, "coalitionWith", e.target.value || undefined)}
+                    disabled={isLoading}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <option value="">Select coalition partner</option>
+                    {FACTIONS.filter(f => !f.startsWith("Vagabond")).map((f) => (
+                      <option key={f} value={f}>
+                        {f}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-muted-foreground">
+                    The Vagabond wins if this faction wins
+                  </p>
+                </div>
+              )}
             </div>
           ))}
         </CardContent>

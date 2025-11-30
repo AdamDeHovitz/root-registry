@@ -74,6 +74,7 @@ export const gamePlayers = pgTable("root_game_players", {
   score: integer("score"),
   isWinner: boolean("is_winner").default(false).notNull(),
   isDominance: boolean("is_dominance").default(false).notNull(),
+  coalitionWith: text("coalition_with"),
   order: integer("order").notNull(),
 });
 

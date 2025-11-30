@@ -179,7 +179,40 @@ Whether this player went for a dominance victory (regardless of whether they won
 - When isDominance is true, score should be null
 - A Vagabond with dominance can win alongside the main winner
 
-### 2f. order (number, required)
+### 2f. coalitionWith (string, optional)
+**ONLY FOR VAGABONDS WITH DOMINANCE**: The faction this Vagabond is allied with.
+
+**CRITICAL RULE:**
+- This field should ONLY be set when:
+  1. The player's faction is a Vagabond (any Vagabond type)
+  2. AND isDominance is true
+- For all other players, this field should be omitted or null
+
+**How to Detect Coalition:**
+When a Vagabond plays dominance, they form a coalition with another faction. Look for a **small faction icon** next to the Vagabond's avatar or in the Vagabond's player section.
+
+**Coalition Icon Identification Guide:**
+- **Orange banner icon** → coalitionWith: "Marquise de Cat"
+- **Blue banner icon** → coalitionWith: "Eyrie"
+- **Green banner icon** → coalitionWith: "Woodland Alliance"
+- **Yellow banner icon** → coalitionWith: "Lizard Cult"
+- **Cyan/Teal banner icon** → coalitionWith: "Riverfolk Company"
+- **Brown/Tan banner icon** → coalitionWith: "Underground Duchy"
+- **Black banner icon** → coalitionWith: "Corvid Conspiracy"
+- **Red banner icon** → coalitionWith: "Lord of the Hundreds"
+- **Dark gray/steel banner icon** → coalitionWith: "Keepers in Iron"
+- **Emerald green banner icon** → coalitionWith: "Knaves of Deepwood"
+- **Light green/aqua banner icon** → coalitionWith: "Lilypad Diaspora"
+- **Purple/indigo banner icon** → coalitionWith: "Twilight Council"
+
+**Important:**
+- The coalition icon will be a small colored banner/symbol showing which faction the Vagabond is allied with
+- Match the faction name EXACTLY from the valid faction list above
+- If you cannot detect a coalition icon for a Vagabond with dominance, omit this field or set to null
+- Only Vagabonds can have coalitions (when they play dominance)
+- When a Vagabond has a coalition, they win if their coalition partner wins
+
+### 2g. order (number, required)
 The position of this player in the scorebar (left to right).
 
 **Valid Range:** 0-5
@@ -211,6 +244,7 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
       "score": 30,
       "isWinner": true,
       "isDominance": false,
+      "coalitionWith": null,
       "order": 0
     },
     {
@@ -219,6 +253,7 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
       "score": null,
       "isWinner": false,
       "isDominance": true,
+      "coalitionWith": null,
       "order": 1
     }
   ]
@@ -302,7 +337,7 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
   ]
 }
 
-# EXAMPLE OUTPUT 3 (Two Winners: Faction + Vagabond with Dominance)
+# EXAMPLE OUTPUT 3 (Two Winners: Faction + Vagabond with Dominance Coalition)
 {
   "map": "Winter",
   "players": [
@@ -312,6 +347,7 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
       "score": 30,
       "isWinner": true,
       "isDominance": false,
+      "coalitionWith": null,
       "order": 0
     },
     {
@@ -320,6 +356,7 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
       "score": 25,
       "isWinner": false,
       "isDominance": false,
+      "coalitionWith": null,
       "order": 1
     },
     {
@@ -328,6 +365,7 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
       "score": null,
       "isWinner": true,
       "isDominance": true,
+      "coalitionWith": "Marquise de Cat",
       "order": 2
     },
     {
@@ -336,6 +374,7 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
       "score": 18,
       "isWinner": false,
       "isDominance": false,
+      "coalitionWith": null,
       "order": 3
     }
   ]
@@ -352,7 +391,9 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
 - For Badgers: Arbiter Vagabond = single badger in armor, Keepers in Iron = faction with multiple armored badgers
 - The Scoundrel is the only Vagabond wearing a pumpkin mask (easy identifier!)
 - If a player has a dominance icon instead of a score: set score: null and isDominance: true
+- **COALITION DETECTION**: If a Vagabond has isDominance: true, look for a small faction icon showing their coalition partner
 - A Vagabond with dominance can win alongside another faction (2 winners maximum)
+- coalitionWith should ONLY be set for Vagabonds with isDominance: true
 - Scores are typically 0-40, but can go up to 100
 - When in doubt between factions, prioritize banner color over character appearance
 
@@ -370,6 +411,7 @@ export interface VisionOCRResponse {
     score: number | null;
     isWinner: boolean;
     isDominance: boolean;
+    coalitionWith?: string | null;
     order: number;
   }>;
 }
@@ -437,6 +479,18 @@ export function validateVisionResponse(response: unknown): {
     // Validate isDominance consistency
     if (player.isDominance && player.score !== null) {
       errors.push(`${prefix}: if isDominance is true, score must be null`);
+    }
+
+    // Validate coalitionWith
+    if (player.coalitionWith !== undefined && player.coalitionWith !== null) {
+      // coalitionWith should only be set for Vagabonds with dominance
+      if (!player.faction.startsWith("Vagabond")) {
+        errors.push(`${prefix}: coalitionWith can only be set for Vagabond factions`);
+      } else if (!player.isDominance) {
+        errors.push(`${prefix}: coalitionWith can only be set when isDominance is true`);
+      } else if (!FACTIONS.includes(player.coalitionWith as any)) {
+        errors.push(`${prefix}: coalitionWith must be a valid faction name, got "${player.coalitionWith}"`);
+      }
     }
 
     // Validate isWinner
