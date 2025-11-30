@@ -149,5 +149,38 @@
         "isDominance": false
       }
     ]
+  },
+  "lake.PNG": {
+    "map": "Lake",
+    "players": [
+      {
+        "playerName": "jsafo",
+        "faction": "Lizard Cult",
+        "score": 30,
+        "isWinner": true,
+        "isDominance": false
+      },
+      {
+        "playerName": "Canute",
+        "faction": "Vagabond - Scoundrel",
+        "score": 24,
+        "isWinner": false,
+        "isDominance": false
+      },
+      {
+        "playerName": "GeneralSherman",
+        "faction": "Underground Duchy",
+        "score": 24,
+        "isWinner": false,
+        "isDominance": false
+      },
+      {
+        "playerName": "TryNihilism",
+        "faction": "Corvid Conspiracy",
+        "score": 20,
+        "isWinner": false,
+        "isDominance": false
+      }
+    ]
   }
 }

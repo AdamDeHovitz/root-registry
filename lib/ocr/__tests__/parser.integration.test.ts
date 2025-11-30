@@ -133,6 +133,27 @@ describe('OCR Integration Tests', () => {
     expect(result.players.length).toBeGreaterThan(0);
   }, TEST_TIMEOUT);
 
+  it('should parse lake.PNG correctly', async () => {
+    const imagePath = path.join(__dirname, '../../../scores/lake.PNG');
+    const expected = expectedResults['lake.PNG'];
+
+    const ocrText = await runOCR(imagePath);
+    console.log('OCR Text (lake.PNG):', ocrText);
+
+    const result: OCRResult = parseOCRText(ocrText);
+    console.log('Parsed Result:', JSON.stringify(result, null, 2));
+
+    const match = assertFlexibleMatch(result, expected, {
+      factionMatchThreshold: 0.50, // Medium threshold
+      scoreTolerance: 1,
+    });
+
+    console.log('Match Details:', match.details.join('\n'));
+
+    // Accept partial success
+    expect(result.players.length).toBeGreaterThan(0);
+  }, TEST_TIMEOUT);
+
   it('should extract at least winner faction from all images', async () => {
     const images = [
       'dominance.webp',
@@ -140,6 +161,7 @@ describe('OCR Integration Tests', () => {
       'BardInvades.PNG',
       'canute.PNG',
       'keepers.PNG',
+      'lake.PNG',
     ];
 
     for (const imageName of images) {
