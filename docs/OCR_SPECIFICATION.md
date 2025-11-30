@@ -16,17 +16,18 @@ Root displays game results on a single screen with:
 **Location**: Background artwork
 **Type**: Visual identification (not text-based)
 **Digital Game Maps** (4 total):
-- **Fall** - Autumn forest with orange/red leaves (Base Game)
-- **Winter** - Snowy landscape (Base Game)
-- **Lake** - Water-dominated landscape with lake centerpiece (Underworld Expansion)
-- **Mountain** - Rocky peaks and mountain terrain (Underworld Expansion)
+- **Fall** - Autumn forest with orange/red leaves, warm golden/amber tones (Base Game)
+- **Winter** - Snowy landscape with white/blue tones (Base Game)
+- **Lake** - Dense green coniferous forest, darker woodland scenery (Underworld Expansion) - NOTE: Despite the name, this map does NOT show visible water features
+- **Mountain** - Rocky peaks and mountain terrain with gray/brown stone (Underworld Expansion)
 
 **Note**: Spring and Summer are community maps for physical game only, will never appear in digital screenshots.
 
 **Extraction Strategy**:
 - Analyze background color palette
-- Identify seasonal markers (snow, autumn colors, water features, mountains)
+- Identify seasonal markers (snow, warm autumn colors, coniferous forest greens, rocky mountains)
 - Match against known map visual patterns
+- Note: Lake map shows forest, not water
 
 **Difficulty**: Medium - Maps have distinct visual signatures but require color/texture analysis
 

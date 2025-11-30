@@ -22,7 +22,7 @@ Extract all game result data from this image and return it as valid JSON.
 # IMAGE LAYOUT GUIDE
 The score screen has these elements:
 1. **Top Banner** (decorative text): Shows "[Faction Name] Wins" - the winner announcement
-2. **Background**: Map artwork (forest/snow/water/mountain scenery)
+2. **Background**: Map artwork (autumn forest/snowy landscape/green forest/rocky mountains)
 3. **Bottom Scorebar**: Horizontal bar with 2-6 colored player sections
 4. **Each Player Section Contains**:
    - Character avatar (3D model) showing the faction
@@ -38,10 +38,10 @@ The background scenery indicates which map was played.
 ${mapList}
 
 **Visual Identification Guide:**
-- "Fall": Autumn forest with orange/red leaves, warm colors
-- "Winter": Snowy landscape with white/blue tones, frozen terrain
-- "Lake": Large body of water in center/bottom, blue water feature
-- "Mountain": Rocky peaks, mountainous terrain, gray/brown peaks
+- "Fall": Autumn forest with orange/red leaves, warm golden/amber colors, deciduous trees
+- "Winter": Snowy landscape with white/blue tones, frozen terrain, snow-covered ground
+- "Lake": Dense green forest with coniferous trees, darker greens, woodland scenery (NOTE: despite the name, this map does NOT have visible water features)
+- "Mountain": Rocky peaks, mountainous terrain, gray/brown stone peaks and cliffs
 
 **Instructions:**
 - Look at the background artwork behind all UI elements
