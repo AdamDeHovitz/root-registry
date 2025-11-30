@@ -95,8 +95,11 @@ export function OCRUpload({ onOCRComplete }: OCRUploadProps) {
 
     // Compress image before uploading
     let processedFile = file;
+    console.log(`Original file size: ${(file.size / 1024 / 1024).toFixed(2)}MB`);
     try {
       processedFile = await compressImage(file);
+      console.log(`Compressed file size: ${(processedFile.size / 1024 / 1024).toFixed(2)}MB`);
+      console.log(`Size reduction: ${((1 - processedFile.size / file.size) * 100).toFixed(1)}%`);
     } catch (compressionError) {
       console.warn("Image compression failed, using original:", compressionError);
       // Continue with original file if compression fails
@@ -105,6 +108,8 @@ export function OCRUpload({ onOCRComplete }: OCRUploadProps) {
     try {
       // Convert compressed image to base64
       const base64Data = await fileToBase64(processedFile);
+      const payloadSize = (base64Data.length / 1024 / 1024).toFixed(2);
+      console.log(`Base64 payload size: ${payloadSize}MB`);
 
       // Send to Gemini Vision API
       const response = await fetch("/api/ocr", {
@@ -115,6 +120,7 @@ export function OCRUpload({ onOCRComplete }: OCRUploadProps) {
           mimeType: "image/jpeg", // Always JPEG after compression
         }),
       });
+      console.log(`Response status: ${response.status} ${response.statusText}`);
 
       // Try to parse response as JSON, fallback to text if it fails
       let result;
