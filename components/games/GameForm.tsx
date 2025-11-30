@@ -32,6 +32,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
   const router = useRouter();
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [map, setMap] = useState("");
+  const [description, setDescription] = useState("");
   const [players, setPlayers] = useState<Player[]>([
     {
       playerName: "",
@@ -175,6 +176,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
           leagueId,
           date,
           map,
+          description: description || undefined,
           players: players.map((p, i) => ({
             ...p,
             order: i,
@@ -240,6 +242,21 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
                 ))}
               </select>
             </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="description">Description (Optional)</Label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              disabled={isLoading}
+              placeholder="Add details about hirelings, landmarks, turn order, or memorable moments..."
+              rows={3}
+              className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            />
+            <p className="text-xs text-muted-foreground">
+              Include additional details like hirelings, landmarks, turn order, or memorable moments from the game
+            </p>
           </div>
         </CardContent>
       </Card>
