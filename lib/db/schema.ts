@@ -53,6 +53,7 @@ export const games = pgTable("root_games", {
   leagueId: uuid("league_id").references(() => leagues.id, { onDelete: "cascade" }).notNull(),
   date: date("date").defaultNow().notNull(),
   map: text("map").notNull(),
+  description: text("description"),
   imageUrl: text("image_url"),
   entryMethod: text("entry_method", { enum: ["manual", "ocr_tesseract"] }).default("manual").notNull(),
   ocrCorrected: boolean("ocr_corrected"),

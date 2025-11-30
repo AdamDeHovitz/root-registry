@@ -21,6 +21,7 @@ export const createGameSchema = z
     map: z.enum(MAPS as unknown as [string, ...string[]], {
       message: "Invalid map",
     }),
+    description: z.string().optional(),
     players: z
       .array(gamePlayerSchema)
       .min(2, "At least 2 players required")
