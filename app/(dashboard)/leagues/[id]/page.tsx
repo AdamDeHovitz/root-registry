@@ -134,6 +134,11 @@ export default async function LeagueDetailPage({ params }: { params: Promise<{ i
                             </span>
                           ))}
                         </div>
+                        {game.createdByUser && (
+                          <p className="text-xs text-muted-foreground">
+                            Submitted by: {game.createdByUser.username}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>

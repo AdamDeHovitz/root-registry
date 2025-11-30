@@ -1,5 +1,5 @@
 import { db } from "../client";
-import { games, gamePlayers, type NewGame, type NewGamePlayer } from "../schema";
+import { games, gamePlayers, users, type NewGame, type NewGamePlayer } from "../schema";
 import { eq, and, desc } from "drizzle-orm";
 
 /**
@@ -27,14 +27,21 @@ export async function findGameById(id: string) {
  */
 export async function getLeagueGames(leagueId: string) {
   const gamesData = await db
-    .select()
+    .select({
+      game: games,
+      creator: {
+        id: users.id,
+        username: users.username,
+      },
+    })
     .from(games)
+    .leftJoin(users, eq(games.createdBy, users.id))
     .where(eq(games.leagueId, leagueId))
     .orderBy(desc(games.date));
 
   // Get players for each game
   const gamesWithPlayers = await Promise.all(
-    gamesData.map(async (game) => {
+    gamesData.map(async ({ game, creator }) => {
       const players = await db
         .select()
         .from(gamePlayers)
@@ -44,6 +51,7 @@ export async function getLeagueGames(leagueId: string) {
       return {
         ...game,
         players,
+        createdByUser: creator,
       };
     })
   );

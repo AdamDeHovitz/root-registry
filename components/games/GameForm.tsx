@@ -33,13 +33,20 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
   const [map, setMap] = useState("");
   const [players, setPlayers] = useState<Player[]>([
     {
-      playerName: currentUsername,
-      userId: currentUserId,
+      playerName: "",
       faction: "",
       score: undefined,
       isWinner: false,
       isDominance: false,
       order: 0,
+    },
+    {
+      playerName: "",
+      faction: "",
+      score: undefined,
+      isWinner: false,
+      isDominance: false,
+      order: 1,
     },
   ]);
   const [error, setError] = useState("");
@@ -91,63 +98,15 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
 
     // Update players with OCR data
     if (data.players.length > 0) {
-      const updatedPlayers: Player[] = [];
-
-      // Check if current user is in the OCR results
-      const currentUserInOCR = data.players.find(
-        (p) => p.playerName?.toLowerCase() === currentUsername.toLowerCase()
-      );
-
-      if (currentUserInOCR) {
-        // Current user found in OCR - use that data
-        updatedPlayers.push({
-          playerName: currentUsername,
-          userId: currentUserId,
-          faction: currentUserInOCR.faction,
-          score: currentUserInOCR.score,
-          isWinner: currentUserInOCR.isWinner ?? false,
-          isDominance: currentUserInOCR.isDominance ?? false,
-          order: 0,
-        });
-
-        // Add other players from OCR
-        data.players.forEach((ocrPlayer, index) => {
-          if (ocrPlayer.playerName?.toLowerCase() !== currentUsername.toLowerCase()) {
-            updatedPlayers.push({
-              playerName: ocrPlayer.playerName || "",
-              faction: ocrPlayer.faction,
-              score: ocrPlayer.score,
-              isWinner: ocrPlayer.isWinner ?? false,
-              isDominance: ocrPlayer.isDominance ?? false,
-              order: updatedPlayers.length,
-            });
-          }
-        });
-      } else {
-        // Current user not in OCR - keep them first, add OCR players after
-        updatedPlayers.push({
-          playerName: currentUsername,
-          userId: currentUserId,
-          faction: data.players[0]?.faction || "",
-          score: data.players[0]?.score,
-          isWinner: data.players[0]?.isWinner ?? false,
-          isDominance: data.players[0]?.isDominance ?? false,
-          order: 0,
-        });
-
-        // Add remaining OCR players
-        for (let i = 1; i < data.players.length && updatedPlayers.length < 6; i++) {
-          const ocrPlayer = data.players[i];
-          updatedPlayers.push({
-            playerName: ocrPlayer.playerName || "",
-            faction: ocrPlayer.faction,
-            score: ocrPlayer.score,
-            isWinner: ocrPlayer.isWinner ?? false,
-            isDominance: ocrPlayer.isDominance ?? false,
-            order: updatedPlayers.length,
-          });
-        }
-      }
+      const updatedPlayers: Player[] = data.players.map((ocrPlayer, index) => ({
+        playerName: ocrPlayer.playerName || "",
+        userId: ocrPlayer.playerName?.toLowerCase() === currentUsername.toLowerCase() ? currentUserId : undefined,
+        faction: ocrPlayer.faction,
+        score: ocrPlayer.score,
+        isWinner: ocrPlayer.isWinner ?? false,
+        isDominance: ocrPlayer.isDominance ?? false,
+        order: index,
+      }));
 
       setPlayers(updatedPlayers);
     }
@@ -184,6 +143,16 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
       }
     }
 
+    // Validate that the current user is one of the players
+    const currentUserIsPlayer = players.some(
+      (p) => p.playerName.toLowerCase() === currentUsername.toLowerCase()
+    );
+
+    if (!currentUserIsPlayer) {
+      setError("You must be one of the players in the game");
+      return;
+    }
+
     const winners = players.filter((p) => p.isWinner);
     if (winners.length === 0) {
       setError("At least one player must be marked as the winner");
@@ -200,7 +169,12 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
           leagueId,
           date,
           map,
-          players: players.map((p, i) => ({ ...p, order: i })),
+          players: players.map((p, i) => ({
+            ...p,
+            order: i,
+            // Set userId for the player matching current username
+            userId: p.playerName.toLowerCase() === currentUsername.toLowerCase() ? currentUserId : p.userId,
+          })),
         }),
       });
 
@@ -286,8 +260,13 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
           {players.map((player, index) => (
             <div key={index} className="space-y-3 rounded-lg border p-4">
               <div className="flex items-center justify-between">
-                <h4 className="font-medium">Player {index + 1}</h4>
-                {players.length > 2 && index !== 0 && (
+                <h4 className="font-medium">
+                  Player {index + 1}
+                  {player.playerName.toLowerCase() === currentUsername.toLowerCase() && (
+                    <span className="ml-2 text-xs text-muted-foreground">(You)</span>
+                  )}
+                </h4>
+                {players.length > 2 && (
                   <Button
                     type="button"
                     variant="ghost"
@@ -309,7 +288,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
                     onChange={(e) => updatePlayer(index, "playerName", e.target.value)}
                     placeholder="Player name"
                     required
-                    disabled={isLoading || index === 0}
+                    disabled={isLoading}
                   />
                 </div>
 
