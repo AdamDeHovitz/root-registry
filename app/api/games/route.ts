@@ -67,6 +67,7 @@ export async function POST(req: NextRequest) {
         score: p.score,
         isWinner: p.isWinner,
         isDominance: p.isDominance,
+        coalitionWith: p.coalitionWith,
         order: p.order,
       }))
     );
