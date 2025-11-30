@@ -23,6 +23,7 @@ export const createGameSchema = z
       message: "Invalid map",
     }),
     description: z.string().optional(),
+    imageUrl: z.string().optional(),
     players: z
       .array(gamePlayerSchema)
       .min(2, "At least 2 players required")

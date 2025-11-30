@@ -18,6 +18,7 @@ interface OCRUploadProps {
       isDominance?: boolean;
       order?: number;
     }>;
+    imageDataUrl?: string;
   }) => void;
 }
 
@@ -136,8 +137,11 @@ export function OCRUpload({ onOCRComplete }: OCRUploadProps) {
         throw new Error(result.error || "OCR processing failed");
       }
 
-      // Pass the parsed data to parent
-      onOCRComplete(result.data);
+      // Pass the parsed data and image to parent
+      onOCRComplete({
+        ...result.data,
+        imageDataUrl: preview || undefined,
+      });
 
       setIsProcessing(false);
     } catch (err) {

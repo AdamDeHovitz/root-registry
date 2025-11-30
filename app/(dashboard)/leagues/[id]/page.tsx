@@ -117,8 +117,8 @@ export default async function LeagueDetailPage({ params }: { params: Promise<{ i
                 const winner = game.players.find((p) => p.isWinner);
                 return (
                   <div key={game.id} className="rounded-lg border p-4">
-                    <div className="flex items-start justify-between">
-                      <div className="space-y-1">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 space-y-1">
                         <p className="font-medium">
                           {new Date(game.date).toLocaleDateString()} • {game.map}
                         </p>
@@ -145,6 +145,15 @@ export default async function LeagueDetailPage({ params }: { params: Promise<{ i
                           </p>
                         )}
                       </div>
+                      {game.imageUrl && (
+                        <div className="flex-shrink-0">
+                          <img
+                            src={game.imageUrl}
+                            alt="Game score screen"
+                            className="h-24 w-auto rounded border object-contain"
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 );

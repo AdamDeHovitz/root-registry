@@ -33,6 +33,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [map, setMap] = useState("");
   const [description, setDescription] = useState("");
+  const [imageDataUrl, setImageDataUrl] = useState<string | undefined>(undefined);
   const [players, setPlayers] = useState<Player[]>([
     {
       playerName: "",
@@ -96,10 +97,16 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
       coalitionWith?: string;
       order?: number;
     }>;
+    imageDataUrl?: string;
   }) => {
     // Set map if detected
     if (data.map) {
       setMap(data.map);
+    }
+
+    // Store the image data URL
+    if (data.imageDataUrl) {
+      setImageDataUrl(data.imageDataUrl);
     }
 
     // Update players with OCR data
@@ -177,6 +184,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
           date,
           map,
           description: description || undefined,
+          imageUrl: imageDataUrl,
           players: players.map((p, i) => ({
             ...p,
             order: i,

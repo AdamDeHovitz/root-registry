@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { leagueId, date, map, players } = result.data;
+    const { leagueId, date, map, description, imageUrl, players } = result.data;
 
     // Check if user is a member of the league
     const isMember = await isLeagueMember(leagueId, session.user.id);
@@ -57,7 +57,9 @@ export async function POST(req: NextRequest) {
         leagueId,
         date,
         map,
-        entryMethod: "manual",
+        description,
+        imageUrl,
+        entryMethod: imageUrl ? "ocr_tesseract" : "manual",
         createdBy: session.user.id,
       },
       players.map((p) => ({
