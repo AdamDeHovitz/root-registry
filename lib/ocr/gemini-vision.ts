@@ -58,10 +58,26 @@ export async function processImageWithGemini(
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      // Try to parse as JSON first, fallback to text if that fails
+      let errorMessage = `API request failed: ${response.status} ${response.statusText}`;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error?.message || errorMessage;
+      } catch {
+        // Response is not JSON, try to get text
+        try {
+          const errorText = await response.text();
+          if (errorText) {
+            errorMessage = errorText;
+          }
+        } catch {
+          // If both fail, use the default message
+        }
+      }
+
       return {
         success: false,
-        error: errorData.error?.message || `API request failed: ${response.status}`,
+        error: errorMessage,
       };
     }
 
@@ -90,7 +106,16 @@ export async function processImageWithGemini(
     }
 
     const jsonText = jsonMatch[1] || jsonMatch[0];
-    const parsedData = JSON.parse(jsonText);
+    let parsedData;
+    try {
+      parsedData = JSON.parse(jsonText);
+    } catch (parseError) {
+      return {
+        success: false,
+        error: "Failed to parse JSON response from Gemini",
+        rawResponse: text,
+      };
+    }
 
     // Validate the response
     const validation = validateVisionResponse(parsedData);
