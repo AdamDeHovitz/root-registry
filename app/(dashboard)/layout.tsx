@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { auth } from "@/lib/auth/config";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -20,6 +21,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
               <span className="text-sm text-muted-foreground">
                 {session.user.username || session.user.email}
               </span>
+              <Link
+                href="/settings"
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
+                Settings
+              </Link>
               <form action="/api/auth/signout" method="POST">
                 <button
                   type="submit"
