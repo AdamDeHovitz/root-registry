@@ -1,5 +1,5 @@
 import { db } from "../client";
-import { games, gamePlayers, users, type NewGame, type NewGamePlayer } from "../schema";
+import { games, gamePlayers, users, ocrCorrections, type NewGame, type NewGamePlayer, type NewOCRCorrection } from "../schema";
 import { eq, and, desc } from "drizzle-orm";
 
 /**
@@ -144,4 +144,16 @@ export async function isGameCreator(gameId: string, userId: string) {
     .limit(1);
 
   return result.length > 0;
+}
+
+/**
+ * Log OCR corrections
+ */
+export async function logOCRCorrection(correctionData: Omit<NewOCRCorrection, "id" | "createdAt">) {
+  const [correction] = await db
+    .insert(ocrCorrections)
+    .values(correctionData)
+    .returning();
+
+  return correction;
 }

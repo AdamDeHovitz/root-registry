@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth/config";
 import { createGameSchema } from "@/lib/validations/game";
-import { createGame } from "@/lib/db/queries/games";
+import { createGame, logOCRCorrection } from "@/lib/db/queries/games";
 import { isLeagueMember } from "@/lib/db/queries/leagues";
+import { compareOCRData } from "@/lib/ocr/compare";
 
 /**
  * POST /api/games - Create new game
@@ -27,7 +28,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { leagueId, date, map, description, imageUrl, players } = result.data;
+    const { leagueId, date, map, description, imageUrl, originalOCRData, players } = result.data;
 
     // Check if user is a member of the league
     const isMember = await isLeagueMember(leagueId, session.user.id);
@@ -73,6 +74,24 @@ export async function POST(req: NextRequest) {
         order: p.order,
       }))
     );
+
+    // If OCR was used and we have original data, check for corrections
+    if (originalOCRData && imageUrl) {
+      const comparison = compareOCRData(originalOCRData, { map, players });
+
+      if (comparison.hasChanges) {
+        // Log the corrections
+        await logOCRCorrection({
+          gameId: game.id,
+          imageUrl,
+          originalData: comparison.originalData,
+          correctedData: comparison.correctedData,
+          fieldsChanged: comparison.fieldsChanged,
+        });
+
+        console.log(`OCR corrections logged for game ${game.id}:`, comparison.fieldsChanged);
+      }
+    }
 
     return NextResponse.json(
       {
