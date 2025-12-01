@@ -157,3 +157,37 @@ export async function logOCRCorrection(correctionData: Omit<NewOCRCorrection, "i
 
   return correction;
 }
+
+/**
+ * Get all OCR corrections
+ */
+export async function getAllOCRCorrections() {
+  const corrections = await db
+    .select({
+      correction: ocrCorrections,
+      game: {
+        id: games.id,
+        date: games.date,
+        map: games.map,
+        leagueId: games.leagueId,
+      },
+    })
+    .from(ocrCorrections)
+    .leftJoin(games, eq(ocrCorrections.gameId, games.id))
+    .orderBy(desc(ocrCorrections.createdAt));
+
+  return corrections;
+}
+
+/**
+ * Get OCR corrections for a specific game
+ */
+export async function getGameOCRCorrections(gameId: string) {
+  const corrections = await db
+    .select()
+    .from(ocrCorrections)
+    .where(eq(ocrCorrections.gameId, gameId))
+    .orderBy(desc(ocrCorrections.createdAt));
+
+  return corrections;
+}
