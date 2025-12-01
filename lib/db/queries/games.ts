@@ -1,5 +1,5 @@
 import { db } from "../client";
-import { games, gamePlayers, type NewGame, type NewGamePlayer } from "../schema";
+import { games, gamePlayers, users, ocrCorrections, type NewGame, type NewGamePlayer, type NewOCRCorrection } from "../schema";
 import { eq, and, desc } from "drizzle-orm";
 
 /**
@@ -27,14 +27,21 @@ export async function findGameById(id: string) {
  */
 export async function getLeagueGames(leagueId: string) {
   const gamesData = await db
-    .select()
+    .select({
+      game: games,
+      creator: {
+        id: users.id,
+        username: users.username,
+      },
+    })
     .from(games)
+    .leftJoin(users, eq(games.createdBy, users.id))
     .where(eq(games.leagueId, leagueId))
     .orderBy(desc(games.date));
 
   // Get players for each game
   const gamesWithPlayers = await Promise.all(
-    gamesData.map(async (game) => {
+    gamesData.map(async ({ game, creator }) => {
       const players = await db
         .select()
         .from(gamePlayers)
@@ -44,6 +51,7 @@ export async function getLeagueGames(leagueId: string) {
       return {
         ...game,
         players,
+        createdByUser: creator,
       };
     })
   );
@@ -136,4 +144,50 @@ export async function isGameCreator(gameId: string, userId: string) {
     .limit(1);
 
   return result.length > 0;
+}
+
+/**
+ * Log OCR corrections
+ */
+export async function logOCRCorrection(correctionData: Omit<NewOCRCorrection, "id" | "createdAt">) {
+  const [correction] = await db
+    .insert(ocrCorrections)
+    .values(correctionData)
+    .returning();
+
+  return correction;
+}
+
+/**
+ * Get all OCR corrections
+ */
+export async function getAllOCRCorrections() {
+  const corrections = await db
+    .select({
+      correction: ocrCorrections,
+      game: {
+        id: games.id,
+        date: games.date,
+        map: games.map,
+        leagueId: games.leagueId,
+      },
+    })
+    .from(ocrCorrections)
+    .leftJoin(games, eq(ocrCorrections.gameId, games.id))
+    .orderBy(desc(ocrCorrections.createdAt));
+
+  return corrections;
+}
+
+/**
+ * Get OCR corrections for a specific game
+ */
+export async function getGameOCRCorrections(gameId: string) {
+  const corrections = await db
+    .select()
+    .from(ocrCorrections)
+    .where(eq(ocrCorrections.gameId, gameId))
+    .orderBy(desc(ocrCorrections.createdAt));
+
+  return corrections;
 }

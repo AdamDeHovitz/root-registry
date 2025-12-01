@@ -122,8 +122,8 @@ export default async function LeagueDetailPage({ params }: { params: Promise<{ i
                 const winner = game.players.find((p) => p.isWinner);
                 return (
                   <div key={game.id} className="rounded-lg border p-4">
-                    <div className="flex items-start justify-between">
-                      <div className="space-y-1">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 space-y-1">
                         <p className="font-medium">
                           {new Date(game.date).toLocaleDateString()} • {game.map}
                         </p>
@@ -131,6 +131,11 @@ export default async function LeagueDetailPage({ params }: { params: Promise<{ i
                           Winner: {winner?.playerName} ({winner?.faction})
                           {winner?.isDominance && " - Dominance"}
                         </p>
+                        {game.description && (
+                          <p className="text-sm text-muted-foreground italic">
+                            {game.description}
+                          </p>
+                        )}
                         <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
                           {game.players.map((p, i) => (
                             <span key={i}>
@@ -139,7 +144,21 @@ export default async function LeagueDetailPage({ params }: { params: Promise<{ i
                             </span>
                           ))}
                         </div>
+                        {game.createdByUser && (
+                          <p className="text-xs text-muted-foreground">
+                            Submitted by: {game.createdByUser.username}
+                          </p>
+                        )}
                       </div>
+                      {game.imageUrl && (
+                        <div className="flex-shrink-0">
+                          <img
+                            src={game.imageUrl}
+                            alt="Game score screen"
+                            className="h-24 w-auto rounded border object-contain"
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 );

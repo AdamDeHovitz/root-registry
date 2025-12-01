@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, timestamp, boolean, integer, date } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, boolean, integer, date, jsonb } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 /**
@@ -53,6 +53,7 @@ export const games = pgTable("root_games", {
   leagueId: uuid("league_id").references(() => leagues.id, { onDelete: "cascade" }).notNull(),
   date: date("date").defaultNow().notNull(),
   map: text("map").notNull(),
+  description: text("description"),
   imageUrl: text("image_url"),
   entryMethod: text("entry_method", { enum: ["manual", "ocr_tesseract"] }).default("manual").notNull(),
   ocrCorrected: boolean("ocr_corrected"),
@@ -74,7 +75,22 @@ export const gamePlayers = pgTable("root_game_players", {
   score: integer("score"),
   isWinner: boolean("is_winner").default(false).notNull(),
   isDominance: boolean("is_dominance").default(false).notNull(),
+  coalitionWith: text("coalition_with"),
   order: integer("order").notNull(),
+});
+
+/**
+ * OCR Corrections table
+ * Tracks when users modify AI-parsed game data
+ */
+export const ocrCorrections = pgTable("root_ocr_corrections", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  gameId: uuid("game_id").references(() => games.id, { onDelete: "cascade" }).notNull(),
+  imageUrl: text("image_url").notNull(),
+  originalData: jsonb("original_data").notNull(),
+  correctedData: jsonb("corrected_data").notNull(),
+  fieldsChanged: text("fields_changed").array().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 /**
@@ -117,6 +133,7 @@ export const gamesRelations = relations(games, ({ one, many }) => ({
     references: [users.id],
   }),
   players: many(gamePlayers),
+  ocrCorrections: many(ocrCorrections),
 }));
 
 export const gamePlayersRelations = relations(gamePlayers, ({ one }) => ({
@@ -127,6 +144,13 @@ export const gamePlayersRelations = relations(gamePlayers, ({ one }) => ({
   user: one(users, {
     fields: [gamePlayers.userId],
     references: [users.id],
+  }),
+}));
+
+export const ocrCorrectionsRelations = relations(ocrCorrections, ({ one }) => ({
+  game: one(games, {
+    fields: [ocrCorrections.gameId],
+    references: [games.id],
   }),
 }));
 
@@ -147,3 +171,6 @@ export type NewGame = typeof games.$inferInsert;
 
 export type GamePlayer = typeof gamePlayers.$inferSelect;
 export type NewGamePlayer = typeof gamePlayers.$inferInsert;
+
+export type OCRCorrection = typeof ocrCorrections.$inferSelect;
+export type NewOCRCorrection = typeof ocrCorrections.$inferInsert;

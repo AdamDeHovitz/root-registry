@@ -18,6 +18,7 @@ interface Player {
   score?: number;
   isWinner: boolean;
   isDominance: boolean;
+  coalitionWith?: string;
   order: number;
 }
 
@@ -31,15 +32,30 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
   const router = useRouter();
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [map, setMap] = useState("");
+  const [description, setDescription] = useState("");
+  const [imageDataUrl, setImageDataUrl] = useState<string | undefined>(undefined);
+  const [originalOCRData, setOriginalOCRData] = useState<{
+    map?: string;
+    players: Player[];
+  } | null>(null);
   const [players, setPlayers] = useState<Player[]>([
     {
-      playerName: currentUsername,
-      userId: currentUserId,
+      playerName: "",
       faction: "",
       score: undefined,
       isWinner: false,
       isDominance: false,
+      coalitionWith: undefined,
       order: 0,
+    },
+    {
+      playerName: "",
+      faction: "",
+      score: undefined,
+      isWinner: false,
+      isDominance: false,
+      coalitionWith: undefined,
+      order: 1,
     },
   ]);
   const [error, setError] = useState("");
@@ -54,6 +70,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
         score: undefined,
         isWinner: false,
         isDominance: false,
+        coalitionWith: undefined,
         order: players.length,
       },
     ]);
@@ -81,75 +98,41 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
       score?: number;
       isWinner?: boolean;
       isDominance?: boolean;
+      coalitionWith?: string;
       order?: number;
     }>;
+    imageDataUrl?: string;
   }) => {
     // Set map if detected
     if (data.map) {
       setMap(data.map);
     }
 
+    // Store the image data URL
+    if (data.imageDataUrl) {
+      setImageDataUrl(data.imageDataUrl);
+    }
+
     // Update players with OCR data
     if (data.players.length > 0) {
-      const updatedPlayers: Player[] = [];
-
-      // Check if current user is in the OCR results
-      const currentUserInOCR = data.players.find(
-        (p) => p.playerName?.toLowerCase() === currentUsername.toLowerCase()
-      );
-
-      if (currentUserInOCR) {
-        // Current user found in OCR - use that data
-        updatedPlayers.push({
-          playerName: currentUsername,
-          userId: currentUserId,
-          faction: currentUserInOCR.faction,
-          score: currentUserInOCR.score,
-          isWinner: currentUserInOCR.isWinner ?? false,
-          isDominance: currentUserInOCR.isDominance ?? false,
-          order: 0,
-        });
-
-        // Add other players from OCR
-        data.players.forEach((ocrPlayer, index) => {
-          if (ocrPlayer.playerName?.toLowerCase() !== currentUsername.toLowerCase()) {
-            updatedPlayers.push({
-              playerName: ocrPlayer.playerName || "",
-              faction: ocrPlayer.faction,
-              score: ocrPlayer.score,
-              isWinner: ocrPlayer.isWinner ?? false,
-              isDominance: ocrPlayer.isDominance ?? false,
-              order: updatedPlayers.length,
-            });
-          }
-        });
-      } else {
-        // Current user not in OCR - keep them first, add OCR players after
-        updatedPlayers.push({
-          playerName: currentUsername,
-          userId: currentUserId,
-          faction: data.players[0]?.faction || "",
-          score: data.players[0]?.score,
-          isWinner: data.players[0]?.isWinner ?? false,
-          isDominance: data.players[0]?.isDominance ?? false,
-          order: 0,
-        });
-
-        // Add remaining OCR players
-        for (let i = 1; i < data.players.length && updatedPlayers.length < 6; i++) {
-          const ocrPlayer = data.players[i];
-          updatedPlayers.push({
-            playerName: ocrPlayer.playerName || "",
-            faction: ocrPlayer.faction,
-            score: ocrPlayer.score,
-            isWinner: ocrPlayer.isWinner ?? false,
-            isDominance: ocrPlayer.isDominance ?? false,
-            order: updatedPlayers.length,
-          });
-        }
-      }
+      const updatedPlayers: Player[] = data.players.map((ocrPlayer, index) => ({
+        playerName: ocrPlayer.playerName || "",
+        userId: ocrPlayer.playerName?.toLowerCase() === currentUsername.toLowerCase() ? currentUserId : undefined,
+        faction: ocrPlayer.faction,
+        score: ocrPlayer.score,
+        isWinner: ocrPlayer.isWinner ?? false,
+        isDominance: ocrPlayer.isDominance ?? false,
+        coalitionWith: ocrPlayer.coalitionWith,
+        order: index,
+      }));
 
       setPlayers(updatedPlayers);
+
+      // Store original OCR data for later comparison
+      setOriginalOCRData({
+        map: data.map,
+        players: updatedPlayers,
+      });
     }
   };
 
@@ -184,6 +167,16 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
       }
     }
 
+    // Validate that the current user is one of the players
+    const currentUserIsPlayer = players.some(
+      (p) => p.playerName.toLowerCase() === currentUsername.toLowerCase()
+    );
+
+    if (!currentUserIsPlayer) {
+      setError("You must be one of the players in the game");
+      return;
+    }
+
     const winners = players.filter((p) => p.isWinner);
     if (winners.length === 0) {
       setError("At least one player must be marked as the winner");
@@ -200,7 +193,15 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
           leagueId,
           date,
           map,
-          players: players.map((p, i) => ({ ...p, order: i })),
+          description: description || undefined,
+          imageUrl: imageDataUrl,
+          originalOCRData: originalOCRData || undefined,
+          players: players.map((p, i) => ({
+            ...p,
+            order: i,
+            // Set userId for the player matching current username
+            userId: p.playerName.toLowerCase() === currentUsername.toLowerCase() ? currentUserId : p.userId,
+          })),
         }),
       });
 
@@ -261,6 +262,21 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
               </select>
             </div>
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="description">Description (Optional)</Label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              disabled={isLoading}
+              placeholder="Add details about hirelings, landmarks, turn order, or memorable moments..."
+              rows={3}
+              className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            />
+            <p className="text-xs text-muted-foreground">
+              Include additional details like hirelings, landmarks, turn order, or memorable moments from the game
+            </p>
+          </div>
         </CardContent>
       </Card>
 
@@ -286,8 +302,13 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
           {players.map((player, index) => (
             <div key={index} className="space-y-3 rounded-lg border p-4">
               <div className="flex items-center justify-between">
-                <h4 className="font-medium">Player {index + 1}</h4>
-                {players.length > 2 && index !== 0 && (
+                <h4 className="font-medium">
+                  Player {index + 1}
+                  {player.playerName.toLowerCase() === currentUsername.toLowerCase() && (
+                    <span className="ml-2 text-xs text-muted-foreground">(You)</span>
+                  )}
+                </h4>
+                {players.length > 2 && (
                   <Button
                     type="button"
                     variant="ghost"
@@ -309,7 +330,7 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
                     onChange={(e) => updatePlayer(index, "playerName", e.target.value)}
                     placeholder="Player name"
                     required
-                    disabled={isLoading || index === 0}
+                    disabled={isLoading}
                   />
                 </div>
 
@@ -384,6 +405,31 @@ export function GameForm({ leagueId, currentUsername, currentUserId }: GameFormP
                   </div>
                 </div>
               </div>
+
+              {player.faction.startsWith("Vagabond") && player.isDominance && (
+                <div className="space-y-2 pt-3 border-t">
+                  <Label htmlFor={`player-${index}-coalition`}>
+                    Coalition Partner (Vagabond allies with this faction)
+                  </Label>
+                  <select
+                    id={`player-${index}-coalition`}
+                    value={player.coalitionWith || ""}
+                    onChange={(e) => updatePlayer(index, "coalitionWith", e.target.value || undefined)}
+                    disabled={isLoading}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <option value="">Select coalition partner</option>
+                    {FACTIONS.filter(f => !f.startsWith("Vagabond")).map((f) => (
+                      <option key={f} value={f}>
+                        {f}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-muted-foreground">
+                    The Vagabond wins if this faction wins
+                  </p>
+                </div>
+              )}
             </div>
           ))}
         </CardContent>

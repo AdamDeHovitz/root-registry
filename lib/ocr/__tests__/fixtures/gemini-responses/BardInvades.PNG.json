@@ -1,0 +1,50 @@
+{
+  "success": true,
+  "data": {
+    "map": "Mountain",
+    "players": [
+      {
+        "playerName": "BardInvades",
+        "faction": "Lord of the Hundreds",
+        "score": 30,
+        "isWinner": true,
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 0
+      },
+      {
+        "playerName": "jsafo",
+        "faction": "Underground Duchy",
+        "score": 24,
+        "isWinner": false,
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 1
+      },
+      {
+        "playerName": "Canute",
+        "faction": "Corvid Conspiracy",
+        "score": 23,
+        "isWinner": false,
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 2
+      },
+      {
+        "playerName": "GeneralSherman",
+        "faction": "Lizard Cult",
+        "score": 23,
+        "isWinner": false,
+        "isDominance": false,
+        "coalitionWith": null,
+        "order": 3
+      }
+    ]
+  },
+  "_meta": {
+    "promptHash": "0a4b25945d3a",
+    "testVersion": "1.0.0",
+    "generatedAt": "2025-11-30T18:27:03.568Z",
+    "imageFile": "BardInvades.PNG"
+  }
+}

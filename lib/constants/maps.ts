@@ -50,10 +50,10 @@ export const MAP_ALIASES: Record<string, Map> = {
  * Map descriptions for UI
  */
 export const MAP_DESCRIPTIONS: Record<Map, string> = {
-  "Fall": "Base game map - balanced terrain",
-  "Winter": "Base game map - frozen river variation",
-  "Lake": "Underworld expansion - lake centerpiece",
-  "Mountain": "Underworld expansion - mountain terrain",
+  "Fall": "Base game map - autumn forest with warm colors",
+  "Winter": "Base game map - snowy landscape",
+  "Lake": "Underworld expansion - dense coniferous forest (no water features)",
+  "Mountain": "Underworld expansion - rocky mountain terrain",
   "Gorge": "Homeland expansion - gorge terrain",
   "Swamp": "Homeland expansion - swamp terrain",
   "Other": "Custom or community map",

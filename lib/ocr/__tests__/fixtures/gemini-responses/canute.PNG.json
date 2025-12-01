@@ -1,0 +1,46 @@
+{
+  "success": true,
+  "data": {
+    "map": "Lake",
+    "players": [
+      {
+        "playerName": "Canute",
+        "faction": "Marquise de Cat",
+        "score": 30,
+        "isWinner": true,
+        "isDominance": false,
+        "order": 0
+      },
+      {
+        "playerName": "BardInvades",
+        "faction": "Underground Duchy",
+        "score": 23,
+        "isWinner": false,
+        "isDominance": false,
+        "order": 1
+      },
+      {
+        "playerName": "jsafo",
+        "faction": "Woodland Alliance",
+        "score": null,
+        "isWinner": false,
+        "isDominance": true,
+        "order": 2
+      },
+      {
+        "playerName": "GeneralSherman",
+        "faction": "Corvid Conspiracy",
+        "score": null,
+        "isWinner": false,
+        "isDominance": true,
+        "order": 3
+      }
+    ]
+  },
+  "_meta": {
+    "promptHash": "0a4b25945d3a",
+    "testVersion": "1.0.0",
+    "generatedAt": "2025-11-30T18:27:12.649Z",
+    "imageFile": "canute.PNG"
+  }
+}

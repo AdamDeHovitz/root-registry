@@ -25,7 +25,7 @@ Extract all game result data from this image and return it as valid JSON.
 # IMAGE LAYOUT GUIDE
 The score screen has these elements:
 1. **Top Banner** (decorative text): Shows "[Faction Name] Wins" - the winner announcement
-2. **Background**: Map artwork (forest/snow/water/mountain scenery)
+2. **Background**: Map artwork (autumn forest/snowy landscape/green forest/rocky mountains)
 3. **Bottom Scorebar**: Horizontal bar with 2-6 colored player sections
 4. **Each Player Section Contains**:
    - Character avatar (3D model) showing the faction
@@ -41,10 +41,10 @@ The background scenery indicates which map was played.
 ${mapList}
 
 **Visual Identification Guide:**
-- "Fall": Autumn forest with orange/red leaves, warm colors
-- "Winter": Snowy landscape with white/blue tones, frozen terrain
-- "Lake": Large body of water in center/bottom, blue water feature
-- "Mountain": Rocky peaks, mountainous terrain, gray/brown peaks
+- "Fall": Autumn forest with orange/red leaves, warm golden/amber colors, deciduous trees
+- "Winter": Snowy landscape with white/blue tones, frozen terrain, snow-covered ground
+- "Lake": Dense green forest with coniferous trees, darker greens, woodland scenery (NOTE: despite the name, this map does NOT have visible water features)
+- "Mountain": Rocky peaks, mountainous terrain, gray/brown stone peaks and cliffs
 
 **Instructions:**
 - Look at the background artwork behind all UI elements
@@ -69,51 +69,78 @@ The player's username shown in the colored box.
 - Common usernames are alphanumeric with no spaces
 
 ### 2b. faction (string, required)
-The faction is shown by the **character avatar** (3D model), NOT text.
+The faction is shown by the **character avatar** (3D model) and the **colored banner/background** behind the player name.
 
 **VALID VALUES (choose exactly one from this list):**
 ${factionList}
 
+**CRITICAL: Banner Color Identification**
+Each player section has a colored banner/background. This is the PRIMARY identifier:
+- **GREY/GRAY BANNER** → Always a Vagabond (one of the 9 Vagabond types)
+- **ORANGE BANNER** → Marquise de Cat
+- **BLUE BANNER** → Eyrie
+- **GREEN BANNER** → Woodland Alliance or Knaves of Deepwood
+- **YELLOW BANNER** → Lizard Cult
+- **CYAN/TEAL BANNER** → Riverfolk Company
+- **BROWN/TAN BANNER** → Underground Duchy or Lord of the Hundreds
+- **BLACK BANNER** → Corvid Conspiracy
+- **GRAY/STEEL BANNER** → Keepers in Iron
+- **PURPLE/INDIGO BANNER** → Twilight Council
+- **LIGHT GREEN/AQUA BANNER** → Lilypad Diaspora
+
 **Visual Identification Guide by Character:**
 
 **Base Game:**
-- "Marquise de Cat" → Orange/ginger cat in military uniform, aristocratic appearance
-- "Eyrie" → Blue bird, eagle or hawk with regal bearing
-- "Woodland Alliance" → Green mice or small woodland creatures, revolutionary appearance
+- "Marquise de Cat" → Orange cat in military uniform (bright orange banner)
+- "Eyrie" → Blue bird, eagle or hawk (blue banner)
+- "Woodland Alliance" → Green mice or small woodland creatures (green banner)
 
-**Vagabond Characters (examine animal species and gear):**
-- "Vagabond - Thief" → RACCOON with thief/rogue clothing, sneaky appearance
-- "Vagabond - Ranger" → WOLF with ranger gear, rugged explorer with scar over left eye
-- "Vagabond - Tinker" → BEAVER with tools and craftsman gear, inventor appearance
-- "Vagabond - Vagrant" → POSSUM with wanderer/traveler appearance, nomadic gear
-- "Vagabond - Arbiter" → BADGER in heavy armor, judge/authority appearance, armored warrior
-- "Vagabond - Ronin" → RACCOON in samurai clothing and gear, masterless warrior
-- "Vagabond - Adventurer" → OWL (wise old owl) with explorer gear, quest-seeker appearance
-- "Vagabond - Harrier" → SQUIRREL with flight gear or wing-like apparatus, aerial appearance
-- "Vagabond - Scoundrel" → CAT wearing a distinctive PUMPKIN MASK, mischievous rogue
+**Vagabond Characters (light gray/silver banner):**
+Note: All Vagabonds have a light gray/silver banner. Identify the specific type by animal species and gear:
+- "Vagabond - Thief" → RACCOON with thief/rogue clothing
+- "Vagabond - Ranger" → WOLF with ranger gear, scar over left eye
+- "Vagabond - Tinker" → BEAVER with tools and craftsman gear
+- "Vagabond - Vagrant" → POSSUM with wanderer/traveler gear
+- "Vagabond - Arbiter" → BADGER in heavy armor
+- "Vagabond - Ronin" → RACCOON in samurai gear
+- "Vagabond - Adventurer" → OWL with explorer gear
+- "Vagabond - Harrier" → SQUIRREL with flight gear
+- "Vagabond - Scoundrel" → CAT wearing PUMPKIN MASK
 
 **Expansion Factions:**
-- "Lizard Cult" → Yellow or green lizards, reptilian appearance
-- "Riverfolk Company" → Cyan/teal colored OTTERS, merchant traders
-- "Underground Duchy" → Brown or gray MOLES, subterranean creatures
-- "Corvid Conspiracy" → Black CROWS or ravens, conspiratorial appearance
-- "Lord of the Hundreds" → Red/brown RATS with banners and military gear
-- "Keepers in Iron" → Gray BADGERS wearing heavy armor (different from Arbiter - these are a faction, not a Vagabond)
-- "Knaves of Deepwood" → Emerald green themed characters
-- "Lilypad Diaspora" → Green water-themed characters, aquatic
-- "Twilight Council" → Indigo/purple themed characters
+- "Lizard Cult" → Yellow/green lizards (yellow banner)
+- "Riverfolk Company" → Cyan/teal OTTERS (cyan banner)
+- "Underground Duchy" → Brown/tan MOLES (tan/beige banner)
+- "Corvid Conspiracy" → Black CROWS/ravens (purple banner)
+- "Lord of the Hundreds" → RATS with military gear (red banner)
+- "Keepers in Iron" → BADGER in armor, faction not Vagabond (dark steel-gray banner)
+- "Knaves of Deepwood" → Emerald green themed characters (green banner)
+- "Lilypad Diaspora" → Green water-themed characters (light green/aqua banner)
+- "Twilight Council" → Purple themed characters (purple banner)
 
-**Instructions:**
-- Look carefully at the 3D character model/avatar for this player
-- Identify the animal species first (raccoon, beaver, owl, cat, wolf, squirrel, possum, badger, etc.)
-- Then look at clothing, gear, and accessories
-- Match to the descriptions above
+**Instructions (FOLLOW THIS TWO-STEP PROCESS):**
+
+**STEP 1: Check the banner color first**
+- Look at the colored banner/background behind the player name
+- GREY BANNER = Vagabond (proceed to Step 2 to identify which Vagabond)
+- BLACK BANNER = Corvid Conspiracy (black crows/ravens)
+- Other colors = use the banner color guide above to narrow down possibilities
+
+**STEP 2: Identify the specific character**
+- Look carefully at the 3D character model/avatar
+- For Vagabonds (grey banner): Identify the animal species
+  - SQUIRREL → Vagabond - Harrier
+  - RACCOON with thief clothing → Vagabond - Thief
+  - RACCOON with samurai gear → Vagabond - Ronin
+  - WOLF with ranger gear → Vagabond - Ranger
+  - BEAVER with tools → Vagabond - Tinker
+  - POSSUM with wanderer gear → Vagabond - Vagrant
+  - BADGER in armor → Vagabond - Arbiter
+  - OWL with explorer gear → Vagabond - Adventurer
+  - CAT with PUMPKIN MASK → Vagabond - Scoundrel
+- For non-Vagabonds: Match the character to faction descriptions
 - Return EXACTLY one of the faction names in quotes above
-- For Vagabonds: The animal species is the primary identifier
-  - Raccoons can be Thief or Ronin (look at gear: rogue clothing vs samurai gear)
-  - Badgers can be Arbiter (Vagabond with armor) or Keepers in Iron (faction with armor)
-- The Scoundrel cat with pumpkin mask is unmistakable
-- If unsure, make your best guess based on animal species and visual style
+- If unsure, prioritize banner color over character appearance
 
 ### 2c. score (number or null, required)
 The score shown in the decorative circular wreath badge on the left side of each player section.
@@ -155,7 +182,40 @@ Whether this player went for a dominance victory (regardless of whether they won
 - When isDominance is true, score should be null
 - A Vagabond with dominance can win alongside the main winner
 
-### 2f. order (number, required)
+### 2f. coalitionWith (string, optional)
+**ONLY FOR VAGABONDS WITH DOMINANCE**: The faction this Vagabond is allied with.
+
+**CRITICAL RULE:**
+- This field should ONLY be set when:
+  1. The player's faction is a Vagabond (any Vagabond type)
+  2. AND isDominance is true
+- For all other players, this field should be omitted or null
+
+**How to Detect Coalition:**
+When a Vagabond plays dominance, they form a coalition with another faction. Look for a **small faction icon** next to the Vagabond's avatar or in the Vagabond's player section.
+
+**Coalition Icon Identification Guide:**
+- **Orange banner icon** → coalitionWith: "Marquise de Cat"
+- **Blue banner icon** → coalitionWith: "Eyrie"
+- **Green banner icon** → coalitionWith: "Woodland Alliance"
+- **Yellow banner icon** → coalitionWith: "Lizard Cult"
+- **Cyan/Teal banner icon** → coalitionWith: "Riverfolk Company"
+- **Brown/Tan banner icon** → coalitionWith: "Underground Duchy"
+- **Black banner icon** → coalitionWith: "Corvid Conspiracy"
+- **Red banner icon** → coalitionWith: "Lord of the Hundreds"
+- **Dark gray/steel banner icon** → coalitionWith: "Keepers in Iron"
+- **Emerald green banner icon** → coalitionWith: "Knaves of Deepwood"
+- **Light green/aqua banner icon** → coalitionWith: "Lilypad Diaspora"
+- **Purple/indigo banner icon** → coalitionWith: "Twilight Council"
+
+**Important:**
+- The coalition icon will be a small colored banner/symbol showing which faction the Vagabond is allied with
+- Match the faction name EXACTLY from the valid faction list above
+- If you cannot detect a coalition icon for a Vagabond with dominance, omit this field or set to null
+- Only Vagabonds can have coalitions (when they play dominance)
+- When a Vagabond has a coalition, they win if their coalition partner wins
+
+### 2g. order (number, required)
 The position of this player in the scorebar (left to right).
 
 **Valid Range:** 0-5
@@ -187,6 +247,7 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
       "score": 30,
       "isWinner": true,
       "isDominance": false,
+      "coalitionWith": null,
       "order": 0
     },
     {
@@ -195,6 +256,7 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
       "score": null,
       "isWinner": false,
       "isDominance": true,
+      "coalitionWith": null,
       "order": 1
     }
   ]
@@ -278,7 +340,7 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
   ]
 }
 
-# EXAMPLE OUTPUT 3 (Two Winners: Faction + Vagabond with Dominance)
+# EXAMPLE OUTPUT 3 (Two Winners: Faction + Vagabond with Dominance Coalition)
 {
   "map": "Winter",
   "players": [
@@ -288,6 +350,7 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
       "score": 30,
       "isWinner": true,
       "isDominance": false,
+      "coalitionWith": null,
       "order": 0
     },
     {
@@ -296,6 +359,7 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
       "score": 25,
       "isWinner": false,
       "isDominance": false,
+      "coalitionWith": null,
       "order": 1
     },
     {
@@ -304,6 +368,7 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
       "score": null,
       "isWinner": true,
       "isDominance": true,
+      "coalitionWith": "Marquise de Cat",
       "order": 2
     },
     {
@@ -312,6 +377,7 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
       "score": 18,
       "isWinner": false,
       "isDominance": false,
+      "coalitionWith": null,
       "order": 3
     }
   ]
@@ -322,13 +388,17 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation, j
 - Use EXACTLY the faction names from the valid values list (exact spelling, capitalization, punctuation)
 - Use EXACTLY the map names: "Fall", "Winter", "Lake", or "Mountain"
 - The leftmost player (order 0) is usually the winner
-- Look at animal species FIRST when identifying Vagabonds (raccoon, beaver, owl, cat, wolf, squirrel, possum, badger, etc.)
+- **CRITICAL**: Check banner color FIRST - GREY banner = Vagabond, BLACK banner = Corvid Conspiracy
+- For Vagabonds (grey banner): Identify animal species (SQUIRREL = Harrier, RACCOON = Thief or Ronin, OWL = Adventurer, etc.)
 - For Vagabonds with same animal: look at gear (Thief raccoon = rogue clothes, Ronin raccoon = samurai gear)
 - For Badgers: Arbiter Vagabond = single badger in armor, Keepers in Iron = faction with multiple armored badgers
 - The Scoundrel is the only Vagabond wearing a pumpkin mask (easy identifier!)
 - If a player has a dominance icon instead of a score: set score: null and isDominance: true
+- **COALITION DETECTION**: If a Vagabond has isDominance: true, look for a small faction icon showing their coalition partner
 - A Vagabond with dominance can win alongside another faction (2 winners maximum)
+- coalitionWith should ONLY be set for Vagabonds with isDominance: true
 - Scores are typically 0-40, but can go up to 100
+- When in doubt between factions, prioritize banner color over character appearance
 
 Now analyze the provided image and return the JSON.`;
 }
@@ -344,6 +414,7 @@ export interface VisionOCRResponse {
     score: number | null;
     isWinner: boolean;
     isDominance: boolean;
+    coalitionWith?: string | null;
     order: number;
   }>;
 }
@@ -411,6 +482,18 @@ export function validateVisionResponse(response: unknown): {
     // Validate isDominance consistency
     if (player.isDominance && player.score !== null) {
       errors.push(`${prefix}: if isDominance is true, score must be null`);
+    }
+
+    // Validate coalitionWith
+    if (player.coalitionWith !== undefined && player.coalitionWith !== null) {
+      // coalitionWith should only be set for Vagabonds with dominance
+      if (!player.faction.startsWith("Vagabond")) {
+        errors.push(`${prefix}: coalitionWith can only be set for Vagabond factions`);
+      } else if (!player.isDominance) {
+        errors.push(`${prefix}: coalitionWith can only be set when isDominance is true`);
+      } else if (!FACTIONS.includes(player.coalitionWith as any)) {
+        errors.push(`${prefix}: coalitionWith must be a valid faction name, got "${player.coalitionWith}"`);
+      }
     }
 
     // Validate isWinner

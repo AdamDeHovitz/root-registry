@@ -18,6 +18,7 @@ interface OCRUploadProps {
       isDominance?: boolean;
       order?: number;
     }>;
+    imageDataUrl?: string;
   }) => void;
 }
 
@@ -25,6 +26,53 @@ export function OCRUpload({ onOCRComplete }: OCRUploadProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState("");
+
+  const compressImage = async (file: File): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          // Calculate new dimensions (max 1920px on longest side)
+          const MAX_SIZE = 1920;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height && width > MAX_SIZE) {
+            height = (height * MAX_SIZE) / width;
+            width = MAX_SIZE;
+          } else if (height > MAX_SIZE) {
+            width = (width * MAX_SIZE) / height;
+            height = MAX_SIZE;
+          }
+
+          // Create canvas and compress
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx?.drawImage(img, 0, 0, width, height);
+
+          // Convert to blob with quality compression
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                resolve(new File([blob], file.name, { type: "image/jpeg" }));
+              } else {
+                reject(new Error("Failed to compress image"));
+              }
+            },
+            "image/jpeg",
+            0.85 // 85% quality
+          );
+        };
+        img.onerror = () => reject(new Error("Failed to load image"));
+        img.src = e.target?.result as string;
+      };
+      reader.onerror = () => reject(new Error("Failed to read file"));
+      reader.readAsDataURL(file);
+    });
+  };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -36,25 +84,33 @@ export function OCRUpload({ onOCRComplete }: OCRUploadProps) {
       return;
     }
 
-    // Validate file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      setError("Image must be smaller than 10MB");
-      return;
-    }
-
     setError("");
     setIsProcessing(true);
 
-    // Create preview
+    // Create preview from original file
     const reader = new FileReader();
     reader.onload = () => {
       setPreview(reader.result as string);
     };
     reader.readAsDataURL(file);
 
+    // Compress image before uploading
+    let processedFile = file;
+    console.log(`Original file size: ${(file.size / 1024 / 1024).toFixed(2)}MB`);
     try {
-      // Convert image to base64
-      const base64Data = await fileToBase64(file);
+      processedFile = await compressImage(file);
+      console.log(`Compressed file size: ${(processedFile.size / 1024 / 1024).toFixed(2)}MB`);
+      console.log(`Size reduction: ${((1 - processedFile.size / file.size) * 100).toFixed(1)}%`);
+    } catch (compressionError) {
+      console.warn("Image compression failed, using original:", compressionError);
+      // Continue with original file if compression fails
+    }
+
+    try {
+      // Convert compressed image to base64
+      const base64Data = await fileToBase64(processedFile);
+      const payloadSize = (base64Data.length / 1024 / 1024).toFixed(2);
+      console.log(`Base64 payload size: ${payloadSize}MB`);
 
       // Send to Gemini Vision API
       const response = await fetch("/api/ocr", {
@@ -62,18 +118,30 @@ export function OCRUpload({ onOCRComplete }: OCRUploadProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           image: base64Data,
-          mimeType: file.type,
+          mimeType: "image/jpeg", // Always JPEG after compression
         }),
       });
+      console.log(`Response status: ${response.status} ${response.statusText}`);
 
-      const result = await response.json();
+      // Try to parse response as JSON, fallback to text if it fails
+      let result;
+      try {
+        result = await response.json();
+      } catch (parseError) {
+        // Response is not JSON, try to get text for better error message
+        const errorText = await response.text();
+        throw new Error(errorText || `Server returned ${response.status} ${response.statusText}`);
+      }
 
       if (!response.ok || !result.success) {
         throw new Error(result.error || "OCR processing failed");
       }
 
-      // Pass the parsed data to parent
-      onOCRComplete(result.data);
+      // Pass the parsed data and image to parent
+      onOCRComplete({
+        ...result.data,
+        imageDataUrl: preview || undefined,
+      });
 
       setIsProcessing(false);
     } catch (err) {

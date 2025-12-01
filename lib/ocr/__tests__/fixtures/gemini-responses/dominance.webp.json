@@ -1,0 +1,46 @@
+{
+  "success": true,
+  "data": {
+    "map": "Mountain",
+    "players": [
+      {
+        "playerName": "You",
+        "faction": "Eyrie",
+        "score": null,
+        "isWinner": true,
+        "isDominance": true,
+        "order": 0
+      },
+      {
+        "playerName": "Woodland Alliance",
+        "faction": "Woodland Alliance",
+        "score": 23,
+        "isWinner": false,
+        "isDominance": false,
+        "order": 1
+      },
+      {
+        "playerName": "Marquise de Cat",
+        "faction": "Marquise de Cat",
+        "score": 15,
+        "isWinner": false,
+        "isDominance": false,
+        "order": 2
+      },
+      {
+        "playerName": "Vagabond",
+        "faction": "Vagabond - Adventurer",
+        "score": 11,
+        "isWinner": false,
+        "isDominance": false,
+        "order": 3
+      }
+    ]
+  },
+  "_meta": {
+    "promptHash": "0a4b25945d3a",
+    "testVersion": "1.0.0",
+    "generatedAt": "2025-11-30T18:26:48.419Z",
+    "imageFile": "dominance.webp"
+  }
+}
