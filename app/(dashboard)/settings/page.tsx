@@ -51,7 +51,12 @@ export default function SettingsPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Update failed");
+        // Show detailed validation errors if available
+        if (data.details?.username?._errors) {
+          setError(data.details.username._errors.join(", "));
+        } else {
+          setError(data.error || "Update failed");
+        }
         return;
       }
 

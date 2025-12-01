@@ -17,6 +17,7 @@ export async function PATCH(req: NextRequest) {
     const result = updateProfileSchema.safeParse(body);
 
     if (!result.success) {
+      console.error("Validation failed for username:", body.username, result.error.format());
       return NextResponse.json(
         { error: "Validation failed", details: result.error.format() },
         { status: 400 }
