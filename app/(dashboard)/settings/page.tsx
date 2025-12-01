@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -12,12 +12,21 @@ export default function SettingsPage() {
   const { data: session, update } = useSession();
   const router = useRouter();
   const [formData, setFormData] = useState({
-    username: session?.user?.username || "",
-    direwolfUsername: session?.user?.direwolfUsername || "",
+    username: "",
+    direwolfUsername: "",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (session?.user) {
+      setFormData({
+        username: session.user.username || "",
+        direwolfUsername: session.user.direwolfUsername || "",
+      });
+    }
+  }, [session]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
