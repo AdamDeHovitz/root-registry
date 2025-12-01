@@ -1,13 +1,14 @@
 import { z } from "zod";
 
 export const registerSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.string().trim().email("Invalid email address"),
   username: z
     .string()
+    .trim()
     .min(3, "Username must be at least 3 characters")
     .max(20, "Username must be less than 20 characters")
     .regex(/^[a-zA-Z0-9_-]+$/, "Username can only contain letters, numbers, dashes, and underscores"),
-  direwolfUsername: z.string().optional(),
+  direwolfUsername: z.string().trim().optional(),
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
@@ -24,10 +25,11 @@ export const loginSchema = z.object({
 export const updateProfileSchema = z.object({
   username: z
     .string()
+    .trim()
     .min(3, "Username must be at least 3 characters")
     .max(20, "Username must be less than 20 characters")
     .regex(/^[a-zA-Z0-9_-]+$/, "Username can only contain letters, numbers, dashes, and underscores"),
-  direwolfUsername: z.string().optional(),
+  direwolfUsername: z.string().trim().optional(),
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;
