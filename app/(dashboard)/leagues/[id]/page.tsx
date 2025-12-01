@@ -44,9 +44,14 @@ export default async function LeagueDetailPage({ params }: { params: Promise<{ i
           </div>
           {league.description && <p className="mt-2 text-muted-foreground">{league.description}</p>}
         </div>
-        <Button asChild>
-          <Link href={`/leagues/${id}/games/new`}>Add Game</Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" asChild>
+            <Link href={`/leagues/${id}/analytics`}>Analytics</Link>
+          </Button>
+          <Button asChild>
+            <Link href={`/leagues/${id}/games/new`}>Add Game</Link>
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
