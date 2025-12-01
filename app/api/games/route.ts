@@ -41,8 +41,12 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if the current user is one of the players
+    // Match by userId OR playerName (either regular username or direwolf username)
     const userIsPlayer = players.some(
-      (p) => p.userId === session.user.id || p.playerName === session.user.username
+      (p) =>
+        p.userId === session.user.id ||
+        p.playerName === session.user.username ||
+        (session.user.direwolfUsername && p.playerName === session.user.direwolfUsername)
     );
 
     if (!userIsPlayer) {
