@@ -89,12 +89,23 @@ export const {
       }
       return true;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.username = user.username;
         token.direwolfUsername = user.direwolfUsername;
       }
+
+      // Refresh user data from database when session is updated
+      if (trigger === "update" && token.id) {
+        const { findUserById } = await import("../db/queries/users");
+        const refreshedUser = await findUserById(token.id as string);
+        if (refreshedUser) {
+          token.username = refreshedUser.username;
+          token.direwolfUsername = refreshedUser.direwolfUsername || undefined;
+        }
+      }
+
       return token;
     },
     async session({ session, token }) {

@@ -7,7 +7,7 @@ export const registerSchema = z.object({
     .trim()
     .min(3, "Username must be at least 3 characters")
     .max(20, "Username must be less than 20 characters")
-    .regex(/^[a-zA-Z0-9_-]+$/, "Username can only contain letters, numbers, dashes, and underscores"),
+    .regex(/^[a-zA-Z0-9._-]+$/, "Username can only contain letters, numbers, periods, dashes, and underscores"),
   direwolfUsername: z.string().trim().optional(),
   password: z
     .string()
@@ -28,7 +28,7 @@ export const updateProfileSchema = z.object({
     .trim()
     .min(3, "Username must be at least 3 characters")
     .max(20, "Username must be less than 20 characters")
-    .regex(/^[a-zA-Z0-9_-]+$/, "Username can only contain letters, numbers, dashes, and underscores"),
+    .regex(/^[a-zA-Z0-9._-]+$/, "Username can only contain letters, numbers, periods, dashes, and underscores"),
   direwolfUsername: z.string().trim().optional(),
 });
 
