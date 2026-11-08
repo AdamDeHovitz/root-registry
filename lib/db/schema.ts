@@ -1,12 +1,18 @@
-import { pgTable, uuid, text, timestamp, boolean, integer, date, jsonb } from "drizzle-orm/pg-core";
+import { pgSchema, uuid, text, timestamp, boolean, integer, date, jsonb } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
+
+/**
+ * All tables live in their own Postgres schema. The Supabase project is shared
+ * with other apps (readers-choice staging owns and resets `public`).
+ */
+export const rootRegistry = pgSchema("root_registry");
 
 /**
  * Users table
  * Stores user authentication and profile information
  * Prefixed with 'root_' to coexist with other projects in shared Supabase
  */
-export const users = pgTable("root_users", {
+export const users = rootRegistry.table("root_users", {
   id: uuid("id").defaultRandom().primaryKey(),
   email: text("email").unique().notNull(),
   username: text("username").unique().notNull(),
@@ -21,7 +27,7 @@ export const users = pgTable("root_users", {
  * Leagues table
  * Password-protected groups where games are tracked
  */
-export const leagues = pgTable("root_leagues", {
+export const leagues = rootRegistry.table("root_leagues", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
   description: text("description"),
@@ -35,7 +41,7 @@ export const leagues = pgTable("root_leagues", {
  * League Memberships table
  * Tracks users' membership in leagues and admin status
  */
-export const leagueMemberships = pgTable("root_league_memberships", {
+export const leagueMemberships = rootRegistry.table("root_league_memberships", {
   id: uuid("id").defaultRandom().primaryKey(),
   leagueId: uuid("league_id").references(() => leagues.id, { onDelete: "cascade" }).notNull(),
   userId: uuid("user_id").references(() => users.id, { onDelete: "set null" }),
@@ -48,7 +54,7 @@ export const leagueMemberships = pgTable("root_league_memberships", {
  * Games table
  * Stores information about each played game
  */
-export const games = pgTable("root_games", {
+export const games = rootRegistry.table("root_games", {
   id: uuid("id").defaultRandom().primaryKey(),
   leagueId: uuid("league_id").references(() => leagues.id, { onDelete: "cascade" }).notNull(),
   date: date("date").defaultNow().notNull(),
@@ -66,7 +72,7 @@ export const games = pgTable("root_games", {
  * Game Players table
  * Stores player information for each game
  */
-export const gamePlayers = pgTable("root_game_players", {
+export const gamePlayers = rootRegistry.table("root_game_players", {
   id: uuid("id").defaultRandom().primaryKey(),
   gameId: uuid("game_id").references(() => games.id, { onDelete: "cascade" }).notNull(),
   playerName: text("player_name").notNull(),
@@ -83,7 +89,7 @@ export const gamePlayers = pgTable("root_game_players", {
  * OCR Corrections table
  * Tracks when users modify AI-parsed game data
  */
-export const ocrCorrections = pgTable("root_ocr_corrections", {
+export const ocrCorrections = rootRegistry.table("root_ocr_corrections", {
   id: uuid("id").defaultRandom().primaryKey(),
   gameId: uuid("game_id").references(() => games.id, { onDelete: "cascade" }).notNull(),
   imageUrl: text("image_url").notNull(),
